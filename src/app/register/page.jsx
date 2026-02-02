@@ -10,7 +10,7 @@ export default function RegisterPage() {
     last_name: "",
     mobile: "",
     password: "",
-    customer_type: "",
+    customer_type: "1",
     national_id: "",
     company_name: "",
     registeration_date: "",
@@ -102,7 +102,7 @@ export default function RegisterPage() {
 
       console.log("📤 Sending to API:", payload);
 
-const res = await register("employee", payload);
+      const res = await register("customer", payload);
 
       console.log("✅ Registration successful:", res.data);
       alert(
@@ -110,25 +110,24 @@ const res = await register("employee", payload);
       );
       // Reset form
       setForm({
-        Name: "",
-        UserName: "",
-        Email: "",
-        Password: "",
-        ConfirmPassword: "",
-        Phone: "",
-        About: "",
-        City: "",
-        CountryID: "",
-        role: "User",
+        first_name: "",
+        last_name: "",
+        email: "",
+        mobile: "",
+        password: "",
+        national_code: "",
+        birth_date: "",
+        customer_type: "",
+        city_id: "",
       });
-      setAvatar(null);
-      setAvatarPreview(null);
-      setSelectedSkills([]);
+      // setAvatar(null);
+      // setAvatarPreview(null);
+      // setSelectedSkills([]);
     } catch (err) {
-      console.error("❌ Registration error:", err.response?.data);
+      console.error("❌ Registration error:", err.response.data.data);
 
       // 2️⃣ دریافت خطاهای validation API
-      const apiErrors = err.response?.data?.errors || {};
+      const apiErrors = err.response?.data?.data.errors || {};
       const formattedErrors = {};
 
       // تبدیل structure API به فرم { fieldName: "error message" }
@@ -146,36 +145,12 @@ const res = await register("employee", payload);
     <div className="min-h-screen flex justify-center items-center bg-[#f3f3f3] p-4 font-vazir">
       <div className="bg-white w-full max-w-5xl rounded-2xl shadow-lg p-8 md:p-12">
         <h1 className="text-3xl font-bold text-center mb-10">ثبت‌نام</h1>
-        <div className="flex flex-col md:flex-row gap-10">
-          <div className="flex flex-col items-center md:w-1/3">
-          </div>
+        <div className="flex flex-col md:flex-row justify-center items-center gap-10">
+
           <form
             onSubmit={handleSubmit}
-
             className="grid grid-cols-1 gap-4 md:w-2/3 md:px-10"
           >
-
-            <input
-              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-              placeholder="نام"
-              onChange={e => setForm({ ...form, first_name: e.target.value })}
-            />
-            {errors.first_name && (
-              <p className="text-red-500 text-sm">{errors.Name}</p>
-            )}
-            <input
-              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-              placeholder="نام خانوادگی"
-              onChange={e => setForm({ ...form, last_name: e.target.value })} />
-            <input
-              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-              placeholder="موبایل" onChange={e => setForm({ ...form, mobile: e.target.value })}
-            />
-            <PasswordInput
-              label="رمز عبور"
-              onChange={e => setForm({ ...form, password: e.target.value })}
-            />
-
             <select
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
               value={form.customer_type}
@@ -185,14 +160,85 @@ const res = await register("employee", payload);
               <option value={2}>حقوقی</option>
             </select>
 
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                placeholder="نام"
+                onChange={e => setForm({ ...form, first_name: e.target.value })}
+              />
+              {errors.first_name && (
+                <p className="text-red-500 text-sm">{errors.Name}</p>
+              )}
+              <input
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                placeholder="نام خانوادگی"
+                onChange={e => setForm({ ...form, last_name: e.target.value })} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+
+              <input
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                placeholder="موبایل (نام کاربری)" onChange={e => setForm({ ...form, mobile: e.target.value })}
+              />
+
+              <PasswordInput
+                label="رمز عبور"
+                onChange={e => setForm({ ...form, password: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" type="date" onChange={e => setForm({ ...form, birth_date: e.target.value })} />
+              <select
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                value={form.gender}
+                onChange={e => setForm({ ...form, gender: Number(e.target.value) })}
+              >
+                <option value={1}>مرد</option>
+                <option value={2}>زن</option>
+              </select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+
+              <input type="email"
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                placeholder="ایمیل" onChange={e => setForm({ ...form, email: e.target.value })}
+              />
+              <input
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                placeholder="کد ملی" onChange={e => setForm({ ...form, national_code: e.target.value })}
+              />
+            </div>
+            <h4>آدرس</h4>
+            <div className="grid grid-cols-2 gap-4">
+              <input type="text"
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                placeholder="نام آدرس" onChange={e => setForm({ ...form, title: e.target.value })}
+              />
+              <textarea
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                rows={3} cols={2} placeholder="آدرس"></textarea>
+              <select
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                value={form.gender}
+                onChange={e => setForm({ ...form, city_id: Number(e.target.value) })}
+              >
+                <option value={1}>کرمان</option>
+                <option value={2}>تهران</option>
+              </select>
+              <input
+                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                placeholder="کد پستی" onChange={e => setForm({ ...form, postal_code: e.target.value })}
+              />
+            </div>
             {form.customer_type === 2 && (
-              <>
+              <div className="grid grid-cols-3 gap-4">
+
                 <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" placeholder="شناسه ملی" onChange={e => setForm({ ...form, national_id: e.target.value })} />
                 <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" placeholder="نام شرکت" onChange={e => setForm({ ...form, company_name: e.target.value })} />
                 <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" type="date" onChange={e => setForm({ ...form, registeration_date: e.target.value })} />
-              </>
+              </div>
             )}
-
             <button
               type="submit"
               className={`w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition ${loading ? "opacity-70 cursor-not-allowed" : ""
