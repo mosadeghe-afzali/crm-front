@@ -10,42 +10,39 @@ export default function RegisterPage() {
     last_name: "",
     mobile: "",
     password: "",
-    customer_type: "1",
+    customer_type: "",
     national_id: "",
     company_name: "",
     registeration_date: "",
+    birth_date: "",
+    gender: null,
+    email: "",
+    national_code: "",
+    city_id: null,
+    postal_code: "",
+    title: "",
   });
-  // const [avatar, setAvatar] = useState(null);
-  // const [avatarPreview, setAvatarPreview] = useState(null);
-  // const [countries, setCountries] = useState([]);
-  // const [skills, setSkills] = useState([]);
+
   // const [selectedSkills, setSelectedSkills] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
-    if (!form.first_name) newErrors.Name = "نام الزامی است";
-    if (!form.last_name) newErrors.UserName = "نام خانوادگی الزامی است";
-
-    // if (!form.email) {
-    //   newErrors.email = "ایمیل الزامی است";
-    // } else {
-    //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //   if (!emailRegex.test(form.Email)) newErrors.email = "ایمیل معتبر نیست";
-    // }
-
+    if (!form.customer_type) newErrors.customer_type = "نوع شخص الزامی است";
+    if (!form.first_name) newErrors.first_name = "نام الزامی است";
+    if (!form.last_name) newErrors.last_name = "نام خانوادگی الزامی است";
+    if (!form.mobile) newErrors.mobile = "شماره موبایل الزامی است";
     if (!form.password) newErrors.password = "رمز عبور الزامی است";
-    // if (!form.ConfirmPassword)
-    //   newErrors.ConfirmPassword = "تایید رمز عبور الزامی است";
-    // if (
-    //   form.Password &&
-    //   form.ConfirmPassword &&
-    //   form.Password !== form.ConfirmPassword
-    // )
-    //   newErrors.ConfirmPassword = "رمز عبور و تایید آن مطابقت ندارند";
 
-    // if (!form.CountryID) newErrors.CountryID = "انتخاب کشور الزامی است";
+    if (Number(form.customer_type) === 2) {
+      if (!form.national_id)
+        newErrors.national_id = "شناسه ملی الزامی است";
+      if (!form.company_name)
+        newErrors.company_name = "نام شرکت الزامی است";
+      if (!form.registeration_date)
+        newErrors.registeration_date = "تاریخ ثبت الزامی است";
+    }
 
     return newErrors;
   };
@@ -57,26 +54,9 @@ export default function RegisterPage() {
   //     .catch(console.error);
   // }, []);
 
-  // const handleAvatarChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setAvatar(file);
-  //     setAvatarPreview(URL.createObjectURL(file));
-  //   }
-  // };
-
-  // const convertToBase64 = (file) =>
-  //   new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (err) => reject(err);
-  //   });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1️⃣ بررسی خطاهای client-side
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -87,19 +67,9 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      // const profileImageBase64 = avatar ? await convertToBase64(avatar) : null;
-      // const userSkills = selectedSkills.map((s) => ({
-      //   Title: s.skillsTitle,
-      //   Value: Number(s.skillsID),
-      //   IsSelected: true,
-      // }));
-
       const payload = {
         ...form,
       };
-
-      // await register(payload);
-
       console.log("📤 Sending to API:", payload);
 
       const res = await register("customer", payload);
@@ -120,23 +90,32 @@ export default function RegisterPage() {
         customer_type: "",
         city_id: "",
       });
-      // setAvatar(null);
-      // setAvatarPreview(null);
       // setSelectedSkills([]);
     } catch (err) {
-      console.error("❌ Registration error:", err.response.data.data);
+      console.error("❌ Registration error:", err.response?.data);
 
-      // 2️⃣ دریافت خطاهای validation API
-      const apiErrors = err.response?.data?.data.errors || {};
-      const formattedErrors = {};
+      const response = err.response?.data;
 
-      // تبدیل structure API به فرم { fieldName: "error message" }
-      Object.keys(apiErrors).forEach((key) => {
-        formattedErrors[key] = apiErrors[key].join(", ");
-      });
+      if (response?.data?.errors) {
+        const apiErrors = response.data.errors;
+        const formattedErrors = {};
 
-      setErrors(formattedErrors);
-    } finally {
+        Object.keys(apiErrors).forEach((field) => {
+          formattedErrors[field] = apiErrors[field].join("، ");
+        });
+
+        setErrors(formattedErrors);
+        return;
+      }
+
+      if (response?.message) {
+        alert(response.message);
+        return;
+      }
+
+      alert("خطای غیرمنتظره‌ای رخ داد. لطفاً دوباره تلاش کنید.");
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -151,92 +130,225 @@ export default function RegisterPage() {
             onSubmit={handleSubmit}
             className="grid grid-cols-1 gap-4 md:w-2/3 md:px-10"
           >
-            <select
-              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-              value={form.customer_type}
-              onChange={e => setForm({ ...form, customer_type: Number(e.target.value) })}
-            >
-              <option value={1}>حقیقی</option>
-              <option value={2}>حقوقی</option>
-            </select>
-
-            <div className="grid grid-cols-2 gap-4">
-              <input
+            <div className="flex flex-col">
+              <select
                 className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                placeholder="نام"
-                onChange={e => setForm({ ...form, first_name: e.target.value })}
-              />
-              {errors.first_name && (
-                <p className="text-red-500 text-sm">{errors.Name}</p>
+                onChange={e => setForm({ ...form, customer_type: Number(e.target.value) })}
+              >
+                <option value="">انتخاب نوع شخص</option>
+                <option value={1}>حقیقی</option>
+                <option value={2}>حقوقی</option>
+              </select>
+              {errors.customer_type && (
+                <p className="text-red-500 text-sm">{errors.customer_type}</p>
               )}
-              <input
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                placeholder="نام خانوادگی"
-                onChange={e => setForm({ ...form, last_name: e.target.value })} />
             </div>
             <div className="grid grid-cols-2 gap-4">
-
-              <input
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                placeholder="موبایل (نام کاربری)" onChange={e => setForm({ ...form, mobile: e.target.value })}
-              />
-
-              <PasswordInput
-                label="رمز عبور"
-                onChange={e => setForm({ ...form, password: e.target.value })}
-              />
+              <div className="flex flex-col">
+                <input
+                  className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                  placeholder="نام"
+                  onChange={e => setForm({ ...form, first_name: e.target.value })}
+                />
+                {errors.first_name && (
+                  <p className="text-red-500 text-sm">{errors.first_name}</p>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <input
+                  className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                  placeholder="نام خانوادگی"
+                  onChange={e => setForm({ ...form, last_name: e.target.value })} />
+                {errors.last_name && (
+                  <p className="text-red-500 text-sm">{errors.last_name}</p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <input
+                  className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                  placeholder="موبایل (نام کاربری)" onChange={e => setForm({ ...form, mobile: e.target.value })}
+                />
+                {errors.mobile && (
+                  <p className="text-red-500 text-sm">{errors.mobile}</p>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <PasswordInput
+                  label="رمز عبور"
+                  onChange={e => setForm({ ...form, password: e.target.value })}
+                />
+                {errors.password && (
+                  <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" type="date" onChange={e => setForm({ ...form, birth_date: e.target.value })} />
-              <select
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                value={form.gender}
-                onChange={e => setForm({ ...form, gender: Number(e.target.value) })}
-              >
-                <option value={1}>مرد</option>
-                <option value={2}>زن</option>
-              </select>
+              <div className="flex flex-col">
+                <input
+                  className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                  type="date"
+                  onChange={e => setForm({ ...form, birth_date: e.target.value })}
+                />
+                {errors.birth_date && (
+                  <p className="text-red-500 text-sm">{errors.birth_date}</p>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <select
+                  className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                  onChange={e => setForm({ ...form, gender: Number(e.target.value) })}
+                >
+                  <option value="">انتخاب جنسیت</option>
+                  <option value={1}>مرد</option>
+                  <option value={2}>زن</option>
+                </select>
+                {errors.gender && (
+                  <p className="text-red-500 text-sm">{errors.gender}</p>
+                )}
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <input type="email"
+                  className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                  placeholder="ایمیل" onChange={e => setForm({ ...form, email: e.target.value })}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <input
+                  className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                  placeholder="کد ملی" onChange={e => setForm({ ...form, national_code: e.target.value })}
+                />
+                {errors.national_code && (
+                  <p className="text-red-500 text-sm">{errors.national_code}</p>
+                )}
+              </div>
+            </div>
+            <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-6">
+              <h4 className="mb-4 text-lg font-semibold text-gray-700">
+                آدرس
+              </h4>
 
-              <input type="email"
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                placeholder="ایمیل" onChange={e => setForm({ ...form, email: e.target.value })}
-              />
-              <input
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                placeholder="کد ملی" onChange={e => setForm({ ...form, national_code: e.target.value })}
-              />
+              <div className="grid grid-cols-2 gap-4">
+
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                    placeholder="نام آدرس"
+                    onChange={e =>
+                      setForm({
+                        ...form,
+                        address: {
+                          ...form.address,
+                          title: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                  {errors["address.title"] && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors["address.title"]}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <select
+                    className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                    onChange={e =>
+                      setForm({
+                        ...form,
+                        address: {
+                          ...form.address,
+                          city_id: Number(e.target.value),
+                        },
+                      })
+                    }
+                  >
+                    <option value="">انتخاب شهر</option>
+                    <option value={1}>کرمان</option>
+                    <option value={2}>تهران</option>
+                  </select>
+                  {errors["address.city_id"] && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors["address.city_id"]}
+                    </p>
+                  )}
+                </div>
+
+                <div className="col-span-2 flex flex-col">
+                  <textarea
+                    rows={3}
+                    className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                    placeholder="آدرس کامل"
+                    onChange={e =>
+                      setForm({
+                        ...form,
+                        address: {
+                          ...form.address,
+                          address: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                  {errors["address.address"] && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors["address.address"]}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
+                    placeholder="کد پستی"
+                    onChange={e =>
+                      setForm({
+                        ...form,
+                        address: {
+                          ...form.address,
+                          postal_code: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                  {errors["address.postal_code"] && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors["address.postal_code"]}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
-            <h4>آدرس</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <input type="text"
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                placeholder="نام آدرس" onChange={e => setForm({ ...form, title: e.target.value })}
-              />
-              <textarea
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                rows={3} cols={2} placeholder="آدرس"></textarea>
-              <select
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                value={form.gender}
-                onChange={e => setForm({ ...form, city_id: Number(e.target.value) })}
-              >
-                <option value={1}>کرمان</option>
-                <option value={2}>تهران</option>
-              </select>
-              <input
-                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]"
-                placeholder="کد پستی" onChange={e => setForm({ ...form, postal_code: e.target.value })}
-              />
-            </div>
+
             {form.customer_type === 2 && (
               <div className="grid grid-cols-3 gap-4">
-
-                <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" placeholder="شناسه ملی" onChange={e => setForm({ ...form, national_id: e.target.value })} />
-                <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" placeholder="نام شرکت" onChange={e => setForm({ ...form, company_name: e.target.value })} />
-                <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" type="date" onChange={e => setForm({ ...form, registeration_date: e.target.value })} />
+                <div className="flex flex-col">
+                  <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" placeholder="شناسه ملی" onChange={e => setForm({ ...form, national_id: e.target.value })} />
+                  {errors.national_id && (
+                    <p className="text-red-500 text-sm">{errors.national_id}</p>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" placeholder="نام شرکت" onChange={e => setForm({ ...form, company_name: e.target.value })} />
+                  {errors.company_name && (
+                    <p className="text-red-500 text-sm">{errors.company_name}</p>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <input className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-[#80bdff]" type="date" onChange={e => setForm({ ...form, registeration_date: e.target.value })} />
+                  {errors.registeration_date && (
+                    <p className="text-red-500 text-sm">{errors.registeration_date}</p>
+                  )}
+                </div>
               </div>
             )}
             <button
