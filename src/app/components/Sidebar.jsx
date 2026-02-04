@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { 
-  Home, 
-  Users, 
-  Building, 
+import {
+  Home,
+  Users,
+  Building,
   FileText,
   Settings,
   LogOut
@@ -14,6 +14,7 @@ import {
 const menuItems = [
   { name: 'داشبورد', href: '/dashboard', icon: Home },
   { name: 'کارشناسان', href: '/dashboard/experts', icon: Users },
+  { name: 'مشترکین', href: '/dashboard/customers', icon: Users },
   { name: 'شرکت‌ها', href: '/dashboard/companies', icon: Building },
   { name: 'درخواست‌ها', href: '/dashboard/requests', icon: FileText },
   { name: 'تنظیمات', href: '/dashboard/settings', icon: Settings },
@@ -39,11 +40,10 @@ export default function Sidebar() {
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isActive
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive
                       ? 'bg-blue-600 text-white'
                       : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                  }`}
+                    }`}
                 >
                   <item.icon className="w-5 h-5" />
                   <span className="font-medium">{item.name}</span>
