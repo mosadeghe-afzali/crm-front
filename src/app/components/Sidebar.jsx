@@ -13,7 +13,7 @@ import {
 
 const menuItems = [
   { name: 'داشبورد', href: '/dashboard', icon: Home },
-  { name: 'کارشناسان', href: '/dashboard/experts', icon: Users },
+  { name: 'کارشناسان', href: '/dashboard/employees', icon: Users },
   { name: 'مشترکین', href: '/dashboard/customers', icon: Users },
   { name: 'شرکت‌ها', href: '/dashboard/companies', icon: Building },
   { name: 'درخواست‌ها', href: '/dashboard/requests', icon: FileText },
