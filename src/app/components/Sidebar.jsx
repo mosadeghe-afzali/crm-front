@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { logout } from "../../../lib/app";
+
 import {
   Home,
   Users,
@@ -22,7 +24,22 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const user = JSON.parse(localStorage.getItem("user"));
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
+      document.cookie = "token=; Max-Age=0; path=/";
+      window.location.href = "/login";
+    }
+  };
   return (
     <div className="w-64 bg-gray-900 text-white h-screen flex flex-col">
       {/* Logo */}
@@ -41,8 +58,8 @@ export default function Sidebar() {
                 <Link
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                     }`}
                 >
                   <item.icon className="w-5 h-5" />
@@ -59,14 +76,19 @@ export default function Sidebar() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-              <span className="font-bold">م</span>
+              <span className="font-bold">
+                {user?.name?.charAt(0) || ""}
+              </span>
             </div>
             <div>
-              <p className="font-medium">مدیر سیستم</p>
-              <p className="text-gray-400 text-sm">admin@crm.com</p>
+              <p className="font-medium">{user?.name}</p>
+              <p className="text-gray-400 text-sm">{user?.mobile}</p>
             </div>
           </div>
-          <button className="p-2 text-gray-400 hover:text-white">
+          <button
+            className="p-2 text-gray-400 hover:text-white cursor-pointer"
+            onClick={handleLogout}
+          >
             <LogOut className="w-5 h-5" />
           </button>
         </div>

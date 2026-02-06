@@ -4,7 +4,7 @@ import { useState } from "react";
 import { login, forgotPassword } from "../../../lib/app";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -23,7 +23,7 @@ export default function LoginPage() {
       console.error(err);
       setForgotMessage(
         err.response?.data?.title ||
-          "❌ خطایی در ارسال درخواست رخ داد، لطفاً ایمیل را بررسی کنید."
+        "❌ خطایی در ارسال درخواست رخ داد، لطفاً ایمیل را بررسی کنید."
       );
     }
   };
@@ -34,27 +34,27 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const { data } = await login(email, password);
+      const { data } = await login(username, password);
       console.log("Login success:", data);
 
       // ذخیره token در localStorage
-      const token = data?.token || data?.accessToken || data?.data?.token;
+      const token = data?.accessToken || data?.data?.accessToken;
       if (token) {
         localStorage.setItem("token", token);
+        document.cookie = `token=${token}; path=/; max-age=86400`;
       }
 
       // ذخیره اطلاعات کاربر در localStorage
       const userData = {
-        name: data?.user?.name || data?.user?.fullName || data?.userName || email.split("@")[0],
-        email: data?.user?.email || email,
-        avatar: data?.user?.avatar || data?.user?.profileImage || "/images/default-avatar.jpg",
-        id: data?.user?.id || data?.userId || null,
+        name: data?.data.first_name + " " + data?.data.last_name,
+        mobile: data?.data?.mobile || mobile,
+        id: data?.data?.userId || null,
       };
 
       localStorage.setItem("user", JSON.stringify(userData));
 
       // Redirect به صفحه اصلی
-      window.location.href = "/";
+      window.location.href = "/dashboard";
     } catch (err) {
       setError(err.response?.data?.message || "خطایی رخ داد");
     } finally {
@@ -72,14 +72,13 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-          {/* Email */}
+
           <div className="relative">
             <input
-              type="email"
-              placeholder="آدرس ایمیل"
+              placeholder="نام کاربری (موبایل)"
               className="w-full border border-gray-300 rounded p-3 pl-10 focus:outline-none focus:ring focus:ring-[#80bdff]"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
             <span className="absolute left-3 top-4 text-gray-500">
@@ -87,7 +86,6 @@ export default function LoginPage() {
             </span>
           </div>
 
-          {/* Password */}
           <div className="relative">
             <input
               type="password"
@@ -122,7 +120,6 @@ export default function LoginPage() {
               <div className="bg-white p-6 rounded-lg w-80">
                 <h2 className="text-lg font-bold mb-4">فراموشی رمز عبور</h2>
                 <input
-                  type="email"
                   placeholder="ایمیل خود را وارد کنید"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
@@ -153,7 +150,7 @@ export default function LoginPage() {
             type="submit"
             className={`w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition cursor-pointer ${
               loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+              }`}
             disabled={loading}
           >
             {loading ? "در حال ورود..." : "ورود"}
