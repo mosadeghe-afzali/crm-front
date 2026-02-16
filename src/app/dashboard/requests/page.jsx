@@ -4,6 +4,7 @@ import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { requestsData as requests } from '../../data/mockData'
 import { Clock, AlertCircle, CheckCircle, Calendar } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 export default function RequestsPage() {
   const columns = [
@@ -11,13 +12,13 @@ export default function RequestsPage() {
     { key: 'company', label: 'شرکت' },
     { key: 'expert', label: 'کارشناس مسئول' },
     { key: 'category', label: 'دسته‌بندی' },
-    { 
-      key: 'priority', 
+    {
+      key: 'priority',
       label: 'اولویت',
       render: (value) => <StatusBadge status={value} />
     },
-    { 
-      key: 'status', 
+    {
+      key: 'status',
       label: 'وضعیت',
       render: (value) => <StatusBadge status={value} />
     },
@@ -29,11 +30,20 @@ export default function RequestsPage() {
   const inProgressRequests = requests.filter(r => r.status === 'در حال انجام').length
   const completedRequests = requests.filter(r => r.status === 'انجام شده').length
   const highPriorityRequests = requests.filter(r => r.priority === 'بالا').length
+  const router = useRouter();
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">مدیریت درخواست‌ها</h1>
-      
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">مدیریت درخواست‌ها</h1>
+        <button
+          className="mt-3 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+          onClick={() => router.push('/dashboard/requests/create')}
+        >
+          ایجاد درخواست
+        </button>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-white rounded-xl shadow p-6">
           <div className="flex items-center justify-between">
@@ -107,10 +117,10 @@ export default function RequestsPage() {
                     <span className="text-sm text-gray-600">{item.count} درخواست</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div 
+                    <div
                       className={`h-3 rounded-full ${item.color}`}
-                      style={{ 
-                        width: `${(item.count / requests.length) * 100}%` 
+                      style={{
+                        width: `${(item.count / requests.length) * 100}%`
                       }}
                     ></div>
                   </div>
@@ -148,6 +158,6 @@ export default function RequestsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
