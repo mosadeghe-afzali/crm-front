@@ -48,7 +48,7 @@ export default function LoginPage() {
       const userData = {
         name: data?.data.first_name + " " + data?.data.last_name,
         mobile: data?.data?.mobile || mobile,
-        id: data?.data?.userId || null,
+        id: data?.data?.user_id || null,
       };
 
       localStorage.setItem("user", JSON.stringify(userData));
