@@ -1,4 +1,7 @@
 import './globals.css'
+import { Toaster } from 'react-hot-toast';
+
+
 
 export const metadata = {
   title: 'CRM System',
@@ -10,6 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="fa" dir="rtl">
       <body>
         {children}
+        <Toaster position="top-center" />
       </body>
     </html>
   )

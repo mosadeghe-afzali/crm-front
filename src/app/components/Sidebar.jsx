@@ -17,6 +17,7 @@ const menuItems = [
   { name: 'داشبورد', href: '/dashboard', icon: Home },
   { name: 'کارشناسان', href: '/dashboard/employees', icon: Users },
   { name: 'مشترکین', href: '/dashboard/customers', icon: Users },
+  { name: 'مدیریت دسترسی ها', href: '/dashboard/permissions', icon: Users },
   { name: 'شرکت‌ها', href: '/dashboard/companies', icon: Building },
   { name: 'درخواست‌ها', href: '/dashboard/requests', icon: FileText },
   { name: 'تنظیمات', href: '/dashboard/settings', icon: Settings },
