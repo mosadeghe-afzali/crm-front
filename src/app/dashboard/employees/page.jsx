@@ -15,10 +15,10 @@ export default function CustomerPage() {
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchCustomers() {
+    async function fetchEmployees() {
       try {
         const res = await getEmployees();
-        console.log(res, 'resssssss')
+        
         setEmployees(res.data.data || []);
       } catch (err) {
         console.error(err);
@@ -27,17 +27,16 @@ export default function CustomerPage() {
       }
     }
 
-    fetchCustomers();
+    fetchEmployees();
   }, []);
 
   const handleView = (id) => {
     router.push(`/dashboard/employees/${id}`);
   };
   
-  const handleEdit = (id) => {
-    router.push(`/dashboard/employees/edit/${id}`);
+  const handleEdit = (row) => {
+    router.push(`/dashboard/employees/edit/${row.id}`);
   };
-  
   
   
   
@@ -95,7 +94,7 @@ export default function CustomerPage() {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handleEdit(row.id);
+              handleEdit(row);
             }}
             className="text-gray-500 hover:text-yellow-600 transition"
             title="ویرایش"
