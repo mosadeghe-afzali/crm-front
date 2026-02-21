@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { logout } from "../../../lib/app";
@@ -25,12 +26,23 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname()
-  const user = JSON.parse(localStorage.getItem("user"));
+  
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error("Error parsing user from localStorage", error);
+      }
+    }
+  }, []);
 
   const handleLogout = async () => {
     try {
       await logout();
-
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
@@ -78,12 +90,13 @@ export default function Sidebar() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
               <span className="font-bold">
-                {user?.name?.charAt(0) || ""}
+                {/* استفاده از Optional Chaining برای جلوگیری از خطا */}
+                {user?.name ? user.name.charAt(0) : "U"}
               </span>
             </div>
             <div>
-              <p className="font-medium">{user?.name}</p>
-              <p className="text-gray-400 text-sm">{user?.mobile}</p>
+              <p className="font-medium">{user?.name || "کاربر"}</p>
+              <p className="text-gray-400 text-sm">{user?.mobile || "---"}</p>
             </div>
           </div>
           <button

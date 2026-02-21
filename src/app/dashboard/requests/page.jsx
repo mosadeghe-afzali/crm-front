@@ -2,35 +2,125 @@
 
 import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
-import { requestsData as requests } from '../../data/mockData'
+import { useState, useEffect } from "react";
 import { Clock, AlertCircle, CheckCircle, Calendar } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { getTickets } from "../../../../lib/app";
+import { requestsData as requests } from '../../data/mockData'
 
 export default function RequestsPage() {
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchTickets() {
+      try {
+        const res = await getTickets();
+        console.log(res.data, 'resssssss')
+        setTickets(res.data.data || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchTickets();
+  }, []);
+
+
   const columns = [
-    { key: 'title', label: 'عنوان درخواست' },
-    { key: 'company', label: 'شرکت' },
-    { key: 'expert', label: 'کارشناس مسئول' },
-    { key: 'category', label: 'دسته‌بندی' },
+    {
+      key: 'id',
+      label: 'شناسه'
+    },
+    {
+      key: 'title',
+      label: 'عنوان درخواست'
+    },
+    {
+      key: 'owner',
+      label: 'درخواست دهنده',
+      render: (owner) => (
+        <div className="flex flex-col">
+          <span>{owner?.full_name || 'نامشخص'}</span>
+          <span className="text-xs text-gray-400">{owner?.email}</span>
+        </div>
+      )
+    },
+    {
+      key: 'department',
+      label: 'دپارتمان',
+      render: (dept) => dept?.name || 'تعیین نشده'
+    },
+    // {
+    //   key: 'category',
+    //   label: 'دسته‌بندی',
+    //   render: (cat) => cat?.name || 'بدون دسته‌بندی'
+    // },
+    {
+      key: 'assignee',
+      label: 'کارشناس مسئول',
+      render: (val) => val ? val.full_name : 'در انتظار تخصیص'
+    },
     {
       key: 'priority',
       label: 'اولویت',
-      render: (value) => <StatusBadge status={value} />
+      render: (priority) => <StatusBadge status={priority?.name} />
     },
     {
       key: 'status',
       label: 'وضعیت',
-      render: (value) => <StatusBadge status={value} />
+      render: (status) => <StatusBadge status={status?.name} />
     },
-    { key: 'createdDate', label: 'تاریخ ایجاد' },
-    { key: 'dueDate', label: 'مهلت' },
-  ]
+    {
+      key: 'reply_count',
+      label: 'پاسخ‌ها',
+      render: (count) => (
+        <span className="bg-gray-100 px-2 py-1 rounded-full text-xs">
+          {count} پاسخ
+        </span>
+      )
+    },
+    {
+      key: 'has_attachments',
+      label: 'پیوست',
+      render: (hasFile) => hasFile ? '📎 دارد' : '---'
+    },
 
-  const newRequests = requests.filter(r => r.status === 'جدید').length
-  const inProgressRequests = requests.filter(r => r.status === 'در حال انجام').length
-  const completedRequests = requests.filter(r => r.status === 'انجام شده').length
-  const highPriorityRequests = requests.filter(r => r.priority === 'بالا').length
-  const router = useRouter();
+    {
+      key: 'created_at',
+      label: 'تاریخ ایجاد',
+      render: (created_at) => (
+        <span className="text-sm">
+          {created_at
+            ? new Date(created_at).toLocaleDateString('fa-IR')
+            : '---'}
+        </span>
+      )
+    },
+    {
+      key: 'dates',
+      label: 'زمان‌بندی پروژه',
+      render: (dates) => (
+        <div className="text-xs flex flex-col gap-1">
+          <div className="flex justify-between gap-2">
+            <span className="text-gray-400">شروع:</span>
+            <span>{dates?.start_at ? new Date(dates.start_at).toLocaleDateString('fa-IR') : 'تعیین نشده'}</span>
+          </div>
+          {dates?.end_at && (
+            <div className="flex justify-between gap-2 text-red-600 font-medium">
+              <span className="text-gray-400">مهلت:</span>
+              <span>{new Date(dates.end_at).toLocaleDateString('fa-IR')}</span>
+            </div>
+          )}
+        </div>
+      )
+    }
+  ];
+  if (loading) return <p>در حال بارگذاری...</p>;
+
 
   return (
     <div>
@@ -44,120 +134,12 @@ export default function RequestsPage() {
           ایجاد درخواست
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">درخواست‌های جدید</p>
-              <p className="text-3xl font-bold text-gray-800">{newRequests}</p>
-            </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <Clock className="w-8 h-8 text-blue-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">در حال انجام</p>
-              <p className="text-3xl font-bold text-gray-800">{inProgressRequests}</p>
-            </div>
-            <div className="p-3 bg-yellow-100 rounded-lg">
-              <AlertCircle className="w-8 h-8 text-yellow-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">انجام شده</p>
-              <p className="text-3xl font-bold text-gray-800">{completedRequests}</p>
-            </div>
-            <div className="p-3 bg-green-100 rounded-lg">
-              <CheckCircle className="w-8 h-8 text-green-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">اولویت بالا</p>
-              <p className="text-3xl font-bold text-gray-800">{highPriorityRequests}</p>
-            </div>
-            <div className="p-3 bg-red-100 rounded-lg">
-              <span className="text-red-600 font-bold text-lg">!</span>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <DataTable
         columns={columns}
-        data={requests}
+        data={tickets}
         title="لیست درخواست‌ها"
       />
-
-      <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">وضعیت درخواست‌ها</h3>
-          <div className="space-y-4">
-            {[
-              { status: 'جدید', count: newRequests, color: 'bg-blue-500' },
-              { status: 'در حال انجام', count: inProgressRequests, color: 'bg-yellow-500' },
-              { status: 'انجام شده', count: completedRequests, color: 'bg-green-500' },
-              { status: 'در انتظار', count: requests.filter(r => r.status === 'در انتظار').length, color: 'bg-gray-500' },
-            ].map((item) => (
-              <div key={item.status} className="flex items-center gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-gray-700">{item.status}</span>
-                    <span className="text-sm text-gray-600">{item.count} درخواست</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div
-                      className={`h-3 rounded-full ${item.color}`}
-                      style={{
-                        width: `${(item.count / requests.length) * 100}%`
-                      }}
-                    ></div>
-                  </div>
-                </div>
-                <div className={`w-4 h-4 ${item.color} rounded-full`}></div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">مهلت‌های نزدیک</h3>
-          <div className="space-y-3">
-            {requests
-              .filter(r => r.status !== 'انجام شده')
-              .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
-              .slice(0, 4)
-              .map((request) => (
-                <div key={request.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-orange-100 rounded-lg">
-                      <Calendar className="w-5 h-5 text-orange-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium">{request.title}</p>
-                      <p className="text-sm text-gray-600">{request.company}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-600">مهلت</p>
-                    <p className="font-bold text-gray-800">{request.dueDate}</p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
     </div >
   )
 }

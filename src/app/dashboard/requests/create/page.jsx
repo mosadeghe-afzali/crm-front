@@ -1,17 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { register, getCities, getProvinces, getDepartments, getPositions } from "../../../../../lib/app";
+import { createTicket, getDepartments, getTicketPriorities } from "../../../../../lib/app";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { useSearchParams } from 'next/navigation'
 import RichTextEditor from "/src/app/components/RichTextEditor";
 import SearchableSelect from "/src/app/components/SearchableSelect";
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
-export default function createTicket() {
+export default function CreateTicketPage() {
+  const router = useRouter();
   const [form, setForm] = useState({
-    user_id: "",      // بعداً از auth بگیر
+    user_id: "",
     title: "",
     priority: "",
     department_id: "",
@@ -20,332 +23,307 @@ export default function createTicket() {
     end_at: null,
     category_id: "",
     attachments: [],
+    requester_type: "",
+    owner_id: null,
+    assignee_id: null,
   });
 
-
   const [departments, setDepartments] = useState([]);
-
+  const [priorities, setPriorities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const searchParams = useSearchParams();
+
+  const formatDateTime = (dateObj) => {
+    if (!dateObj) return null;
+    const date = dateObj.toDate ? dateObj.toDate() : new Date(dateObj);
+    const offset = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+    return adjustedDate.toISOString().slice(0, 19).replace("T", " ");
+  };
+
+  const removeFile = (index) => {
+    setForm(prev => ({
+      ...prev,
+      attachments: prev.attachments.filter((_, i) => i !== index)
+    }));
+  };
 
   const validate = () => {
     const newErrors = {};
-
-    if (!form.title || form.title.length < 3)
-      newErrors.title = "عنوان حداقل ۳ کاراکتر الزامی است";
-
-    if (!form.priority)
-      newErrors.priority = "اولویت الزامی است";
-
-    if (!form.department_id)
-      newErrors.department_id = "دپارتمان الزامی است";
-
-    if (!form.description || form.description.length < 10)
+    if (!form.title || form.title.trim().length < 3) newErrors.title = "عنوان حداقل ۳ کاراکتر الزامی است";
+    if (!form.priority) newErrors.priority = "اولویت الزامی است";
+    if (!form.department_id) newErrors.department_id = "دپارتمان الزامی است";
+    if (!form.description || form.description.replace(/<[^>]*>/g, '').length < 10)
       newErrors.description = "توضیحات حداقل ۱۰ کاراکتر الزامی است";
-
     return newErrors;
   };
 
-
-
-
   useEffect(() => {
-    getDepartments()
-      .then(res => setDepartments(res.data.data))
-      .catch(console.error);
+    getDepartments().then(res => setDepartments(res.data.data)).catch(console.error);
+    getTicketPriorities().then(res => setPriorities(res.data.data)).catch(console.error);
+
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      setForm(prev => ({ ...prev, user_id: user.id }));
+    }
   }, []);
-
-  const toDateTime = (date) => {
-    if (!date) return null;
-    const jsDate = date.toDate();
-    return jsDate.toISOString().slice(0, 19).replace("T", " ");
-  };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({});
 
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      toast.error("لطفاً خطاهای فرم را برطرف کنید");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
-    const formData = new FormData();
+    setLoading(true);
+    try {
+      const currentUserId = form.user_id || JSON.parse(localStorage.getItem("user"))?.id;
+      const formData = new FormData();
+      formData.append("user_id", currentUserId);
+      formData.append("title", form.title);
+      formData.append("priority", form.priority);
+      formData.append("department_id", form.department_id);
+      formData.append("requester_type", form.requester_type);
 
-    formData.append("user_id", form.user_id);
-    formData.append("title", form.title);
-    formData.append("priority", form.priority);
-    formData.append("department_id", form.department_id);
-    formData.append("description", form.description);
+      const descriptionToSend = form.description.replace(/<p>&nbsp;<\/p>/g, "").trim();
+      formData.append("description", descriptionToSend);
+      if (form.owner_id) formData.append("owner_id", form.owner_id);
+      if (form.assignee_id) formData.append("assignee_id", form.assignee_id);
 
-    if (form.start_at)
-      formData.append("start_at", toDateTime(form.start_at));
+      if (form.start_at) formData.append("start_at", formatDateTime(form.start_at));
+      if (form.end_at) formData.append("end_at", formatDateTime(form.end_at));
+      if (form.attachments.length > 0) {
+        form.attachments.forEach((file) => {
+          formData.append("attachments[]", file);
+        });
+      }
 
-    if (form.end_at)
-      formData.append("end_at", toDateTime(form.end_at));
+      const response = await createTicket(formData);
+      if (response.data.success) {
+        toast.success(response.data.message || "تیکت با موفقیت ثبت شد");
+      }
 
-    if (form.category_id)
-      formData.append("category_id", form.category_id);
+      setTimeout(() => {
+        router.push('/dashboard/requests');
+      }, 1500);
+      const initialForm = {
+        user_id: "",
+        title: "",
+        priority: "",
+        department_id: "",
+        description: "",
+        start_at: null,
+        end_at: null,
+        category_id: "",
+        attachments: [],
+        requester_type: "",
+        owner_id: null,
+        assignee_id: null,
+      };
+      setForm({
+        ...initialForm,
+        user_id: currentUserId
+      }
 
-    form.attachments.forEach((file, index) => {
-      formData.append(`attachments[${index}]`, file);
-    });
-
-    await createTicket(formData); // API خودت
+      );
+    } catch (err) {
+      console.error("❌ Registration error:", err.response?.data);
+      const apiResponse = err.response?.data;
+      if (apiResponse?.errors) {
+        setErrors(apiResponse.errors);
+        toast.error("خطا در مقادیر ورودی");
+      } else {
+        toast.error(apiResponse?.message || "خطایی در هنگام ثبت رخ داد");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
+  return (
+    <div className="rounded-2xl border border-gray-300 bg-white p-10 shadow-md">
+      <h2 className="text-2xl font-bold mb-10 text-gray-900">ایجاد تیکت جدید</h2>
 
-return (
-  <div className="rounded-2xl border border-gray-200 bg-white p-10 shadow-sm">
-    <h2 className="text-2xl font-bold mb-10 text-gray-800">
-      ایجاد تیکت جدید
-    </h2>
-
-    <form
-      onSubmit={handleSubmit}
-      className="grid grid-cols-1 lg:grid-cols-5 gap-12"
-    >
-      {/* ================= RIGHT SIDE ================= */}
-      <div className="lg:col-span-3 space-y-8 max-w-xl">
-
-        {/* Title */}
-        <div className="flex flex-col">
-          <label className="mb-2 text-sm font-medium text-gray-600">
-            عنوان تیکت
-          </label>
-          <input
-            className="border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-            value={form.title}
-            onChange={e =>
-              setForm({ ...form, title: e.target.value })
-            }
-          />
-        </div>
-
-        {/* Requester Type */}
-        <div className="flex flex-col">
-          <label className="mb-2 text-sm font-medium text-gray-600">
-            نوع درخواست‌دهنده
-          </label>
-          <select
-            className="border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-            value={form.requester_type}
-            onChange={e =>
-              setForm({
-                ...form,
-                requester_type: Number(e.target.value),
-                owner_id: null,
-                owner_name: ""
-              })
-            }
-          >
-            <option value="">انتخاب کنید</option>
-            <option value={1}>کاربر</option>
-            <option value={2}>کارشناس</option>
-          </select>
-        </div>
-
-        {/* Owner Search - فقط اگر کاربر باشد */}
-        {form.requester_type === 1 && (
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+        {/* RIGHT SIDE */}
+        <div className="lg:col-span-3 space-y-8 max-w-xl">
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-600">
-              انتخاب کاربر
+            <label className="mb-2 text-sm font-medium text-gray-700">عنوان تیکت</label>
+            <input
+              className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+            />
+            {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title}</p>}
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">نوع درخواست‌دهنده</label>
+            <select
+              className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+              value={form.requester_type}
+              onChange={(e) => setForm({ ...form, requester_type: Number(e.target.value), owner_id: null })}
+            >
+              <option value="">انتخاب کنید</option>
+              <option value={1}>کاربر</option>
+              <option value={2}>کارشناس</option>
+            </select>
+          </div>
+
+          {form.requester_type === 1 && (
+            <div className="flex flex-col text-gray-900">
+              <label className="mb-2 text-sm font-medium text-gray-700">انتخاب کاربر</label>
+              <SearchableSelect
+                placeholder="نام کاربر را انتخاب کنید"
+                fetchUrl="users/customers"
+                searchField="full_name"
+                onChange={(selected) => setForm({ ...form, owner_id: selected?.value })}
+              />
+            </div>
+          )}
+
+          <div className="flex flex-col">
+            <label className="mb-3 text-sm font-medium text-gray-700">توضیحات تیکت</label>
+            <div className="relative border border-gray-400 rounded-lg overflow-hidden text-gray-900">
+              <RichTextEditor
+                value={form.description}
+                onChange={(html) => setForm({ ...form, description: html })}
+              />
+            </div>
+            {errors.description && <p className="text-sm text-red-600 mt-1">{errors.description}</p>}
+          </div>
+        </div>
+
+        {/* LEFT SIDE */}
+        <div className="lg:col-span-2 space-y-6 bg-gray-50 p-8 rounded-xl border border-gray-300 max-w-md h-fit">
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">اولویت تیکت</label>
+            <select
+              className="border border-gray-400 rounded-lg px-4 py-2.5 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+              value={form.priority}
+              onChange={(e) => setForm({ ...form, priority: e.target.value })}
+            >
+              <option value="">انتخاب کنید</option>
+              {priorities.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+            {errors.priority && <p className="text-sm text-red-600 mt-1">{errors.priority}</p>}
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">دپارتمان</label>
+            <select
+              className="border border-gray-400 rounded-lg px-4 py-2.5 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+              value={form.department_id}
+              onChange={(e) => setForm({ ...form, department_id: e.target.value })}
+            >
+              <option value="">انتخاب دپارتمان</option>
+              {departments.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+            </select>
+            {errors.department_id && <p className="text-sm text-red-600 mt-1">{errors.department_id}</p>}
+          </div>
+          {/* Assignee */}
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">
+              مسئول تیکت
             </label>
 
             <SearchableSelect
-              placeholder="نام کاربر را انتخاب کنید"
-              fetchUrl="users/customers"
+              placeholder="انتخاب کنید"
+              fetchUrl="users/employees"
               searchField="full_name"
               value={
-                form.owner_id
-                  ? { value: form.owner_id, label: form.owner_name }
+                form.assignee_id
+                  ? { value: form.assignee_id, label: form.assignee_name }
                   : null
               }
               onChange={(selected) =>
                 setForm({
                   ...form,
-                  owner_id: selected?.value || null,
-                  owner_name: selected?.label || ""
+                  assignee_id: selected?.value || null,
+                  assignee_name: selected?.label || ""
                 })
               }
             />
           </div>
-        )}
-
-        {/* Description */}
-        <div className="flex flex-col">
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-gray-600">
-              توضیحات
-            </label>
-
-            <label className="cursor-pointer text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-md border border-gray-300 transition">
-              انتخاب فایل
-              <input
-                type="file"
-                multiple
-                className="hidden"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    attachments: Array.from(e.target.files),
-                  })
-                }
+          {/* Start Time */}
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">زمان آغاز</label>
+            <div className="flex items-center bg-white rounded-lg border border-gray-400 pr-3">
+              <DatePicker
+                calendar={persian}
+                locale={persian_fa}
+                value={form.start_at}
+                onChange={(date) => setForm({ ...form, start_at: date })}
+                inputClass="border-none outline-none py-2.5 w-full text-gray-900 bg-transparent"
+                format="YYYY/MM/DD HH:mm"
               />
-            </label>
+              {form.start_at && (
+                <button type="button" onClick={() => setForm({ ...form, start_at: null })} className="text-red-500 px-3 text-xl">×</button>
+              )}
+            </div>
           </div>
 
-          <RichTextEditor
-            value={form.description}
-            onChange={(html) =>
-              setForm({ ...form, description: html })
-            }
-          />
+          {/* End Time */}
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">زمان پایان</label>
+            <div className="flex items-center bg-white rounded-lg border border-gray-400 pr-3">
+              <DatePicker
+                calendar={persian}
+                locale={persian_fa}
+                value={form.end_at}
+                onChange={(date) => setForm({ ...form, end_at: date })}
+                inputClass="border-none outline-none py-2.5 w-full text-gray-900 bg-transparent"
+                format="YYYY/MM/DD HH:mm"
+              />
+              {form.end_at && (
+                <button type="button" onClick={() => setForm({ ...form, end_at: null })} className="text-red-500 px-3 text-xl">×</button>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* ================= LEFT SIDE ================= */}
-      <div className="lg:col-span-2 space-y-8 bg-gray-50 p-8 rounded-xl border border-gray-200 max-w-md">
+        {/* ATTACHMENTS */}
+        <div className="lg:col-span-5 border-t border-gray-300 pt-8 mt-4">
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-gray-900">ضمائم و فایل‌های پیوست</h3>
+              <label className="cursor-pointer bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-400 hover:text-blue-600 transition-all text-xs font-bold">
+                <span>📎 انتخاب فایل</span>
+                <input type="file" multiple className="hidden" onChange={(e) => {
+                  const newFiles = Array.from(e.target.files);
+                  setForm(prev => ({ ...prev, attachments: [...prev.attachments, ...newFiles] }));
+                  e.target.value = null;
+                }} />
+              </label>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {form.attachments.map((file, index) => (
+                <div key={index} className="flex items-center gap-4 bg-gray-50 px-3 py-2 rounded-lg border border-gray-300">
+                  <span className="text-sm text-gray-900 truncate max-w-[150px]">{file.name}</span>
+                  <button type="button" onClick={() => removeFile(index)} className="text-red-500 text-2xl font-bold">×</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
-        {/* Department */}
-        <div className="flex flex-col">
-          <label className="mb-2 text-sm font-medium text-gray-600">
-            دپارتمان
-          </label>
-          <select
-            className="border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-            value={form.department_id}
-            onChange={e =>
-              setForm({
-                ...form,
-                department_id: Number(e.target.value)
-              })
-            }
+        {/* Submit Button */}
+        <div className="lg:col-span-5 flex justify-end pt-8 border-t border-gray-300">
+          <button
+            type="submit"
+            disabled={loading}
+            className={`bg-blue-600 hover:bg-blue-700 text-white px-12 py-3 rounded-lg font-bold text-lg transition-all ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
           >
-            <option value="">انتخاب دپارتمان</option>
-            {departments.map(dep => (
-              <option key={dep.id} value={dep.id}>
-                {dep.name}
-              </option>
-            ))}
-          </select>
+            {loading ? "در حال ثبت..." : "ثبت تیکت"}
+          </button>
         </div>
-
-        {/* Assignee */}
-        <div className="flex flex-col">
-          <label className="mb-2 text-sm font-medium text-gray-600">
-            مسئول تیکت
-          </label>
-
-          <SearchableSelect
-            placeholder="انتخاب کنید"
-            fetchUrl="users/employees"
-            searchField="full_name"
-            value={
-              form.assignee_id
-                ? { value: form.assignee_id, label: form.assignee_name }
-                : null
-            }
-            onChange={(selected) =>
-              setForm({
-                ...form,
-                assignee_id: selected?.value || null,
-                assignee_name: selected?.label || ""
-              })
-            }
-          />
-        </div>
-
-        {/* Start Time */}
-        <div className="flex flex-col">
-          <label className="mb-2 text-sm font-medium text-gray-600">
-            زمان آغاز
-          </label>
-
-          <div className="flex gap-2 items-center">
-            <DatePicker
-              calendar={persian}
-              locale={persian_fa}
-              value={form.start_at || ""}
-              onChange={(date) =>
-                setForm({
-                  ...form,
-                  start_at: date || null
-                })
-              }
-              inputClass="border border-gray-300 rounded-lg px-4 py-2.5 w-full"
-              format="YYYY/MM/DD HH:mm:ss"
-            />
-
-            {form.start_at && (
-              <button
-                type="button"
-                onClick={() =>
-                  setForm({ ...form, start_at: null })
-                }
-                className="text-red-500 text-xs"
-              >
-                حذف
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* End Time */}
-        <div className="flex flex-col">
-          <label className="mb-2 text-sm font-medium text-gray-600">
-            زمان پایان
-          </label>
-
-          <div className="flex gap-2 items-center">
-            <DatePicker
-              calendar={persian}
-              locale={persian_fa}
-              value={form.end_at || ""}
-              onChange={(date) =>
-                setForm({
-                  ...form,
-                  end_at: date || null
-                })
-              }
-              inputClass="border border-gray-300 rounded-lg px-4 py-2.5 w-full"
-              format="YYYY/MM/DD HH:mm:ss"
-            />
-
-            {form.end_at && (
-              <button
-                type="button"
-                onClick={() =>
-                  setForm({ ...form, end_at: null })
-                }
-                className="text-red-500 text-xs"
-              >
-                حذف
-              </button>
-            )}
-          </div>
-        </div>
-
-      </div>
-
-      {/* Submit */}
-      <div className="lg:col-span-5 flex justify-end pt-6">
-        <button
-          type="submit"
-          className={`bg-blue-600 hover:bg-blue-700 text-white px-8 py-2.5 rounded-lg transition ${
-            loading ? "opacity-70 cursor-not-allowed" : ""
-          }`}
-          disabled={loading}
-        >
-          ثبت تیکت
-        </button>
-      </div>
-    </form>
-  </div>
-);
-
-
-
+      </form>
+    </div>
+  );
 }

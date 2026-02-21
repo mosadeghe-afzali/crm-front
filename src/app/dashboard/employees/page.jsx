@@ -11,7 +11,7 @@ export default function CustomerPage() {
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchCustomers() {
+    async function fetchEmployees() {
       try {
         const res = await getEmployees();
         console.log(res, 'resssssss')
@@ -23,7 +23,7 @@ export default function CustomerPage() {
       }
     }
 
-    fetchCustomers();
+    fetchEmployees();
   }, []);
 
   const columns = [
