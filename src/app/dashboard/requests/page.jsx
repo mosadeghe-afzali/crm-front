@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { Clock, AlertCircle, CheckCircle, Calendar } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { getTickets } from "../../../../lib/app";
+import { Eye } from 'lucide-react'
 import { requestsData as requests } from '../../data/mockData'
 
 export default function RequestsPage() {
@@ -116,6 +117,22 @@ export default function RequestsPage() {
             </div>
           )}
         </div>
+      )
+    },
+    {
+      key: 'actions',
+      label: 'عملیات',
+      render: (_, row) => (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/dashboard/requests/${row.id}`);
+          }}
+          className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors"
+        >
+          <Eye className="w-4 h-4" />
+          <span className="text-sm">مشاهده</span>
+        </button>
       )
     }
   ];
