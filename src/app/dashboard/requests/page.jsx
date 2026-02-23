@@ -3,22 +3,24 @@
 import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { useState, useEffect } from "react";
-import { Clock, AlertCircle, CheckCircle, Calendar } from 'lucide-react'
+import { Clock, AlertCircle, CheckCircle, Calendar, FileText } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { getTickets } from "../../../../lib/app";
 import { Eye } from 'lucide-react'
-import { requestsData as requests } from '../../data/mockData'
+
+const API_URL = 'http://localhost:8000/api/v1';
 
 export default function RequestsPage() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [report, setReport] = useState(null);
+  const [reportLoading, setReportLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     async function fetchTickets() {
       try {
         const res = await getTickets();
-        console.log(res.data, 'resssssss')
         setTickets(res.data.data || []);
       } catch (err) {
         console.error(err);
@@ -27,7 +29,27 @@ export default function RequestsPage() {
       }
     }
 
+    async function fetchReport() {
+      try {
+        const res = await fetch(`${API_URL}/tickets/report`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setReport(data.data);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setReportLoading(false);
+      }
+    }
+
     fetchTickets();
+    fetchReport();
   }, []);
 
 
@@ -76,15 +98,6 @@ export default function RequestsPage() {
       render: (status) => <StatusBadge status={status?.name} />
     },
     {
-      key: 'reply_count',
-      label: 'پاسخ‌ها',
-      render: (count) => (
-        <span className="bg-gray-100 px-2 py-1 rounded-full text-xs">
-          {count} پاسخ
-        </span>
-      )
-    },
-    {
       key: 'has_attachments',
       label: 'پیوست',
       render: (hasFile) => hasFile ? '📎 دارد' : '---'
@@ -99,24 +112,6 @@ export default function RequestsPage() {
             ? new Date(created_at).toLocaleDateString('fa-IR')
             : '---'}
         </span>
-      )
-    },
-    {
-      key: 'dates',
-      label: 'زمان‌بندی پروژه',
-      render: (dates) => (
-        <div className="text-xs flex flex-col gap-1">
-          <div className="flex justify-between gap-2">
-            <span className="text-gray-400">شروع:</span>
-            <span>{dates?.start_at ? new Date(dates.start_at).toLocaleDateString('fa-IR') : 'تعیین نشده'}</span>
-          </div>
-          {dates?.end_at && (
-            <div className="flex justify-between gap-2 text-red-600 font-medium">
-              <span className="text-gray-400">مهلت:</span>
-              <span>{new Date(dates.end_at).toLocaleDateString('fa-IR')}</span>
-            </div>
-          )}
-        </div>
       )
     },
     {
@@ -152,11 +147,100 @@ export default function RequestsPage() {
         </button>
       </div>
 
+      {!reportLoading && report && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <FileText className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">کل درخواست‌ها</p>
+                <p className="text-xl font-bold text-gray-800">{report.total_tickets}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-yellow-100 rounded-lg">
+                <Clock className="w-5 h-5 text-yellow-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">در انتظار پاسخ</p>
+                <p className="text-xl font-bold text-gray-800">{report.pending_response}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <AlertCircle className="w-5 h-5 text-orange-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">در حال انجام</p>
+                <p className="text-xl font-bold text-gray-800">{report.in_progress}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-red-100 rounded-lg">
+                <Calendar className="w-5 h-5 text-red-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">اولویت بالا</p>
+                <p className="text-xl font-bold text-gray-800">{report.high_priority}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <DataTable
         columns={columns}
         data={tickets}
         title="لیست درخواست‌ها"
       />
+
+      {!reportLoading && report && report.upcoming_end_tickets && report.upcoming_end_tickets.length > 0 && (
+        <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="p-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-800">درخواست‌های با مهلت نزدیک</h2>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">شناسه</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">درخواست دهنده</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">مهلت</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">عملیات</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {report.upcoming_end_tickets.map((ticket) => (
+                  <tr key={ticket.ticket_id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 text-sm text-gray-800">{ticket.ticket_id}</td>
+                    <td className="px-4 py-3 text-sm text-gray-800">{ticket.full_name}</td>
+                    <td className="px-4 py-3 text-sm text-red-600 font-medium">
+                      {new Date(ticket.end_at).toLocaleDateString('fa-IR')}
+                    </td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => router.push(`/dashboard/requests/${ticket.ticket_id}`)}
+                        className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
+                      >
+                        <Eye className="w-4 h-4" />
+                        مشاهده
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div >
   )
 }
