@@ -45,7 +45,7 @@ export default function CustomerPage() {
         <h1 className="text-2xl font-bold">مدیریت کاربران</h1>
         <button
           className="mt-3 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
-          onClick={() => router.push('/dashboard/register?type_name=customer')}
+          onClick={() => router.push('/dashboard/customers/create?type_name=customer')}
         >
           ایجاد مشترک جدید
         </button>
