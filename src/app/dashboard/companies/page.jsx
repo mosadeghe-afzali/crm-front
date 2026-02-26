@@ -3,7 +3,7 @@
 import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { useState, useEffect } from "react";
-import { Building, Phone, Mail, TrendingUp } from 'lucide-react'
+import { Building, Phone, Mail, TrendingUp, Eye } from 'lucide-react'
 import { getCompanies } from "../../../../lib/app";
 import { useRouter } from 'next/navigation'
 
@@ -62,6 +62,19 @@ export default function CompaniesPage() {
       key: 'registeration_date', 
       label: 'تاریخ ثبت',
       render: (val) => val ? new Date(val).toLocaleDateString('fa-IR') : '---'
+    },
+    {
+      key: 'actions',
+      label: 'عملیات',
+      render: (_, row) => (
+        <button
+          onClick={() => router.push(`/dashboard/companies/${row.id}`)}
+          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+          title="مشاهده جزئیات"
+        >
+          <Eye className="w-5 h-5" />
+        </button>
+      )
     },
   ]
 

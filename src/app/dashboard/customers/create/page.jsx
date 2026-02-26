@@ -7,8 +7,12 @@ import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
+    const router = useRouter();
+  
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -101,6 +105,8 @@ export default function RegisterPage() {
     console.log(validationErrors)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      toast.error("لطفاً خطاهای فرم را برطرف کنید");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     console.log('in first')
@@ -112,7 +118,7 @@ export default function RegisterPage() {
       const cleanPayload = (obj) =>
         Object.fromEntries(
           Object.entries(obj)
-            .filter(([_, v]) => v !== "" && v !== null)
+            .filter(([_, v]) => v !== "" && v !== null && v !== 0)
             .map(([k, v]) => [
               k,
               typeof v === "object" && !Array.isArray(v)
@@ -121,7 +127,7 @@ export default function RegisterPage() {
             ])
         );
 
-      const payload = {
+      let payload = {
         ...cleanPayload(form),
         type_name: typeName,
         ...(form.birth_date && {
@@ -132,22 +138,19 @@ export default function RegisterPage() {
         }),
       };
 
-
-      // const cleanPayload = Object.fromEntries(
-      //   Object.entries(form).filter(
-      //     ([_, value]) => value !== "" && value !== undefined
-      //   )
-      // );
-
-
       console.log("📤 Sending to API:", payload);
 
       const res = await register(typeName, payload);
 
       console.log("✅ Registration successful:", res.data);
-      alert(
-        "ثبت‌نام با موفقیت انجام شد! لطفاً ایمیل خود را برای تأیید باز کنید."
-      );
+
+      if (res.data.success) {
+        toast.success(res.data.message || "کاربر با موفقیت ثبت شد");
+      }
+
+      setTimeout(() => {
+        router.push('/dashboard/customers');
+      }, 1500);
       // Reset form
       const initialForm = {
         first_name: "",
@@ -188,15 +191,9 @@ export default function RegisterPage() {
         });
 
         setErrors(formattedErrors);
+        toast.error("خطا در مقادیر ورودی");
         return;
       }
-
-      if (response?.message) {
-        alert(response.message);
-        return;
-      }
-
-      alert("خطای غیرمنتظره‌ای رخ داد. لطفاً دوباره تلاش کنید.");
     }
     finally {
       setLoading(false);
@@ -295,7 +292,7 @@ export default function RegisterPage() {
                 <label className="mb-2 text-sm font-medium text-gray-700">کد ملی</label>
                 <input
                   className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="کد ملی" 
+                  placeholder="کد ملی"
                   onChange={e => setForm({ ...form, national_code: e.target.value })}
                 />
                 {errors.national_code && (
@@ -309,7 +306,7 @@ export default function RegisterPage() {
                 <input
                   autoComplete="off"
                   className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="موبایل (نام کاربری)" 
+                  placeholder="موبایل (نام کاربری)"
                   onChange={e => setForm({ ...form, mobile: e.target.value })}
                 />
                 {errors.mobile && (
@@ -328,7 +325,7 @@ export default function RegisterPage() {
                 <label className="mb-2 text-sm font-medium text-gray-700">ایمیل</label>
                 <input type="email"
                   className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="ایمیل" 
+                  placeholder="ایمیل"
                   onChange={e => setForm({ ...form, email: e.target.value })}
                 />
                 {errors.email && (
@@ -501,10 +498,10 @@ export default function RegisterPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex flex-col">
                   <label className="mb-2 text-sm font-medium text-gray-700">نام شرکت</label>
-                  <input 
-                    className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none" 
-                    placeholder="نام شرکت" 
-                    onChange={e => setForm({ ...form, company_name: e.target.value })} 
+                  <input
+                    className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="نام شرکت"
+                    onChange={e => setForm({ ...form, company_name: e.target.value })}
                   />
                   {errors.company_name && (
                     <p className="text-red-600 text-sm mt-1">{errors.company_name}</p>
@@ -515,7 +512,7 @@ export default function RegisterPage() {
                   <input
                     className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="شناسه ملی"
-                    onChange={e => setForm({ ...form, national_id: e.target.value })} 
+                    onChange={e => setForm({ ...form, national_id: e.target.value })}
                   />
                   {errors.national_id && (
                     <p className="text-red-600 text-sm mt-1">{errors.national_id}</p>
