@@ -205,7 +205,7 @@ export default function CompanyDetailPage() {
 
   if (error) {
     return (
-      <div className="bg-white rounded-xl shadow p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
         <div className="text-red-500 text-center">{error}</div>
         <button
           onClick={() => router.back()}
@@ -223,13 +223,13 @@ export default function CompanyDetailPage() {
       <div className="space-y-6">
         <button
           onClick={() => setIsEditing(false)}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
         >
           <ArrowRight className="w-5 h-5" />
           بازگشت
         </button>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-8">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow p-8">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">ویرایش اطلاعات شرکت</h1>
             <div className="flex gap-2">
@@ -254,51 +254,51 @@ export default function CompanyDetailPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">نام</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">نام</label>
               <input
                 type="text"
                 value={form.first_name}
                 onChange={(e) => setForm({ ...form, first_name: e.target.value })}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               />
             </div>
 
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">نام خانوادگی</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">نام خانوادگی</label>
               <input
                 type="text"
                 value={form.last_name}
                 onChange={(e) => setForm({ ...form, last_name: e.target.value })}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               />
             </div>
 
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">موبایل</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">موبایل</label>
               <input
                 type="text"
                 value={form.mobile}
                 onChange={(e) => setForm({ ...form, mobile: e.target.value })}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               />
             </div>
 
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">ایمیل</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">ایمیل</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               />
             </div>
 
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">جنسیت</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">جنسیت</label>
               <select
                 value={form.gender}
                 onChange={(e) => setForm({ ...form, gender: Number(e.target.value) })}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               >
                 <option value="">انتخاب جنسیت</option>
                 <option value={1}>مرد</option>
@@ -307,46 +307,46 @@ export default function CompanyDetailPage() {
             </div>
 
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">کد ملی</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">کد ملی</label>
               <input
                 type="text"
                 value={form.national_code}
                 onChange={(e) => setForm({ ...form, national_code: e.target.value })}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               />
             </div>
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">اطلاعات شرکت</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">اطلاعات شرکت</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">نام شرکت</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">نام شرکت</label>
                 <input
                   type="text"
                   value={form.company_name}
                   onChange={(e) => setForm({ ...form, company_name: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 />
               </div>
 
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">شناسه ملی</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">شناسه ملی</label>
                 <input
                   type="text"
                   value={form.national_id}
                   onChange={(e) => setForm({ ...form, national_id: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 />
               </div>
 
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">تاریخ ثبت</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">تاریخ ثبت</label>
                 <input
                   type="text"
                   value={form.registeration_date}
                   onChange={(e) => setForm({ ...form, registeration_date: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   placeholder="1402-01-01"
                 />
               </div>
@@ -354,24 +354,24 @@ export default function CompanyDetailPage() {
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">آدرس</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">آدرس</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">نام آدرس</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">نام آدرس</label>
                 <input
                   type="text"
                   value={form.address.title}
                   onChange={(e) => setForm({ ...form, address: { ...form.address, title: e.target.value } })}
-                  className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 />
               </div>
 
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">استان</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">استان</label>
                 <select
                   value={form.address.province_id}
                   onChange={(e) => handleProvinceChange(Number(e.target.value))}
-                  className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 >
                   <option value="">انتخاب استان</option>
                   {provinces.map((province) => (
@@ -383,11 +383,11 @@ export default function CompanyDetailPage() {
               </div>
 
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">شهر</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">شهر</label>
                 <select
                   value={form.address.city_id}
                   onChange={(e) => setForm({ ...form, address: { ...form.address, city_id: Number(e.target.value) } })}
-                  className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none disabled:bg-gray-100"
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none disabled:bg-gray-100 dark:disabled:bg-gray-700"
                   disabled={!form.address.province_id}
                 >
                   <option value="">انتخاب شهر</option>
@@ -400,21 +400,21 @@ export default function CompanyDetailPage() {
               </div>
 
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">کد پستی</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">کد پستی</label>
                 <input
                   type="text"
                   value={form.address.postal_code}
                   onChange={(e) => setForm({ ...form, address: { ...form.address, postal_code: e.target.value } })}
-                  className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 />
               </div>
 
               <div className="flex flex-col md:col-span-2">
-                <label className="text-sm font-medium text-gray-700 mb-1">آدرس کامل</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">آدرس کامل</label>
                 <textarea
                   value={form.address.address}
                   onChange={(e) => setForm({ ...form, address: { ...form.address, address: e.target.value } })}
-                  className="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-900 dark:text-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   rows={2}
                 />
               </div>
@@ -430,7 +430,7 @@ export default function CompanyDetailPage() {
       <div className="flex justify-between items-center">
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
         >
           <ArrowRight className="w-5 h-5" />
           بازگشت به لیست
@@ -445,71 +445,71 @@ export default function CompanyDetailPage() {
       </div>
 
       {/* Main Info Card */}
-      <div className="bg-white rounded-xl shadow p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-8">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           اطلاعات شرکت
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-blue-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">نام کامل</p>
-              <p className="font-semibold text-gray-900">
+              <p className="text-sm text-gray-500 dark:text-gray-400">نام کامل</p>
+              <p className="font-semibold text-gray-900 dark:text-white">
                 {customer.first_name} {customer.last_name}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
               <Phone className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">موبایل</p>
-              <p className="font-semibold text-gray-900">{customer.mobile}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">موبایل</p>
+              <p className="font-semibold text-gray-900 dark:text-white">{customer.mobile}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
               <Mail className="w-6 h-6 text-purple-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">ایمیل</p>
-              <p className="font-semibold text-gray-900">{customer.email || "---"}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">ایمیل</p>
+              <p className="font-semibold text-gray-900 dark:text-white">{customer.email || "---"}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-pink-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">جنسیت</p>
-              <p className="font-semibold text-gray-900">{customer.gender?.name || "---"}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">جنسیت</p>
+              <p className="font-semibold text-gray-900 dark:text-white">{customer.gender?.name || "---"}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-yellow-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">کد ملی</p>
-              <p className="font-semibold text-gray-900">{customer.national_code || "---"}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">کد ملی</p>
+              <p className="font-semibold text-gray-900 dark:text-white">{customer.national_code || "---"}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
               <Calendar className="w-6 h-6 text-orange-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">آخرین ورود</p>
-              <p className="font-semibold text-gray-900">{formatToShamsi(customer.last_login)}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">آخرین ورود</p>
+              <p className="font-semibold text-gray-900 dark:text-white">{formatToShamsi(customer.last_login)}</p>
             </div>
           </div>
         </div>
@@ -517,40 +517,40 @@ export default function CompanyDetailPage() {
 
       {/* Company Info Card */}
       {customer.compnay && (
-        <div className="bg-white rounded-xl shadow p-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-8">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
             <Building className="w-5 h-5" />
             اطلاعات شرکت
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
                 <Building className="w-6 h-6 text-indigo-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">نام شرکت</p>
-                <p className="font-semibold text-gray-900">{customer.compnay.company_name}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">نام شرکت</p>
+                <p className="font-semibold text-gray-900 dark:text-white">{customer.compnay.company_name}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
                 <User className="w-6 h-6 text-teal-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">شناسه ملی</p>
-                <p className="font-semibold text-gray-900">{customer.compnay.national_id}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">شناسه ملی</p>
+                <p className="font-semibold text-gray-900 dark:text-white">{customer.compnay.national_id}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
                 <Calendar className="w-6 h-6 text-amber-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">تاریخ ثبت</p>
-                <p className="font-semibold text-gray-900">{customer.compnay.registeration_date || "---"}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">تاریخ ثبت</p>
+                <p className="font-semibold text-gray-900 dark:text-white">{customer.compnay.registeration_date || "---"}</p>
               </div>
             </div>
           </div>
@@ -559,8 +559,8 @@ export default function CompanyDetailPage() {
 
       {/* Addresses Card */}
       {customer.addresses && customer.addresses.length > 0 && (
-        <div className="bg-white rounded-xl shadow p-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 dark:text-white rounded-xl shadow p-8">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
             <MapPin className="w-5 h-5" />
             آدرس‌ها
           </h2>
@@ -569,19 +569,19 @@ export default function CompanyDetailPage() {
             {customer.addresses.map((address) => (
               <div
                 key={address.id}
-                className="p-6 border border-gray-200 rounded-lg hover:border-blue-300 transition"
+                className="p-6 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-300 transition"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                       {address.address_title || "آدرس"}
                     </h3>
                     {address.city && (
-                      <p className="text-gray-600">شهر: {address.city.name}</p>
+                      <p className="text-gray-600 dark:text-gray-300">شهر: {address.city.name}</p>
                     )}
-                    <p className="text-gray-600">{address.address || "---"}</p>
+                    <p className="text-gray-600 dark:text-gray-300">{address.address || "---"}</p>
                     {address.postal_code && (
-                      <p className="text-gray-500 text-sm mt-1">کد پستی: {address.postal_code}</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">کد پستی: {address.postal_code}</p>
                     )}
                   </div>
                 </div>
@@ -592,8 +592,8 @@ export default function CompanyDetailPage() {
       )}
 
       {(!customer.addresses || customer.addresses.length === 0) && (
-        <div className="bg-white rounded-xl shadow p-8">
-          <div className="text-gray-500 text-center">آدرسی ثبت نشده است</div>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-8">
+          <div className="text-gray-500 dark:text-gray-400 text-center">آدرسی ثبت نشده است</div>
         </div>
       )}
     </div>

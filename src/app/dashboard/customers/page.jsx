@@ -67,12 +67,12 @@ export default function CustomerPage() {
     },
   ];
 
-  if (loading) return <p>در حال بارگذاری...</p>;
+  if (loading) return <p className="dark:text-white">در حال بارگذاری...</p>;
 
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">مدیریت کاربران</h1>
+        <h1 className="text-2xl font-bold dark:text-white">مدیریت کاربران</h1>
         <button
           className="mt-3 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
           onClick={() => router.push('/dashboard/customers/create?type_name=customer')}

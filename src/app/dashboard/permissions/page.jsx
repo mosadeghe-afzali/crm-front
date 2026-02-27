@@ -149,7 +149,7 @@ export default function CustomerPage() {
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">مدیریت دسترس ها</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">مدیریت دسترس ها</h1>
         <div className="flex flex-row gap-2" >
           <button
             className="mt-3 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
@@ -183,21 +183,21 @@ export default function CustomerPage() {
 
       {showRoleModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-lg">
 
-            <h2 className="text-lg font-bold mb-4">ایجاد نقش جدید</h2>
+            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">ایجاد نقش جدید</h2>
 
             <input
               type="text"
               value={roleName}
               onChange={(e) => setRoleName(e.target.value)}
               placeholder="نام نقش"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
 
             <div className="flex justify-end gap-2">
               <button
-                className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+                className="px-4 py-2 rounded-lg bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-900 dark:text-white"
                 onClick={() => setShowRoleModal(false)}
                 disabled={roleLoading}
               >
@@ -220,21 +220,21 @@ export default function CustomerPage() {
 
       {showPermissionModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-lg">
 
-            <h2 className="text-lg font-bold mb-4">ایجاد دسترسی جدید</h2>
+            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">ایجاد دسترسی جدید</h2>
 
             <input
               type="text"
               value={permissionName}
               onChange={(e) => setPermissionName(e.target.value)}
               placeholder="نام دسترسی"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
 
             <div className="flex justify-end gap-2">
               <button
-                className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+                className="px-4 py-2 rounded-lg bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-900 dark:text-white"
                 onClick={() => setShowPermissionModal(false)}
                 disabled={permissionLoading}
               >
@@ -257,15 +257,15 @@ export default function CustomerPage() {
 
       {showAssignModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-lg">
 
-            <h2 className="text-lg font-bold mb-4">تخصیص دسترسی به نقش</h2>
+            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">تخصیص دسترسی به نقش</h2>
 
             {/* انتخاب نقش */}
             <select
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="">انتخاب نقش</option>
               {roles.map((role) => (
@@ -279,7 +279,7 @@ export default function CustomerPage() {
             <select
               value={selectedPermission}
               onChange={(e) => setSelectedPermission(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="">انتخاب دسترسی</option>
               {permissions.map((permission) => (
@@ -291,7 +291,7 @@ export default function CustomerPage() {
 
             <div className="flex justify-end gap-2">
               <button
-                className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+                className="px-4 py-2 rounded-lg bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-900 dark:text-white"
                 onClick={() => setShowAssignModal(false)}
               >
                 انصراف

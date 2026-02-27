@@ -149,47 +149,47 @@ export default function RequestsPage() {
 
       {!reportLoading && report && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <FileText className="w-5 h-5 text-blue-600" />
+              <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">کل درخواست‌ها</p>
-                <p className="text-xl font-bold text-gray-800">{report.total_tickets}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">کل درخواست‌ها</p>
+                <p className="text-xl font-bold text-gray-800 dark:text-white">{report.total_tickets}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Clock className="w-5 h-5 text-yellow-600" />
+              <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">در انتظار پاسخ</p>
-                <p className="text-xl font-bold text-gray-800">{report.pending_response}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">در انتظار پاسخ</p>
+                <p className="text-xl font-bold text-gray-800 dark:text-white">{report.pending_response}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <AlertCircle className="w-5 h-5 text-orange-600" />
+              <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg">
+                <AlertCircle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">در حال انجام</p>
-                <p className="text-xl font-bold text-gray-800">{report.in_progress}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">در حال انجام</p>
+                <p className="text-xl font-bold text-gray-800 dark:text-white">{report.in_progress}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <Calendar className="w-5 h-5 text-red-600" />
+              <div className="p-2 bg-red-100 dark:bg-red-900 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">اولویت بالا</p>
-                <p className="text-xl font-bold text-gray-800">{report.high_priority}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">بسته شده</p>
+                <p className="text-xl font-bold text-gray-800 dark:text-white">{report.closed}</p>
               </div>
             </div>
           </div>
@@ -203,7 +203,7 @@ export default function RequestsPage() {
       />
 
       {!reportLoading && report && report.upcoming_end_tickets && report.upcoming_end_tickets.length > 0 && (
-        <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="p-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-800">درخواست‌های با مهلت نزدیک</h2>
           </div>

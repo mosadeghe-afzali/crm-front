@@ -78,12 +78,12 @@ export default function CompaniesPage() {
     },
   ]
 
-  if (loading) return <p>در حال بارگذاری...</p>;
+  if (loading) return <p className="dark:text-white">در حال بارگذاری...</p>;
 
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">مدیریت شرکت‌ها</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">مدیریت شرکت‌ها</h1>
         <button
           className="mt-3 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
           onClick={() => router.push('/dashboard/companies/create')}
@@ -93,44 +93,44 @@ export default function CompaniesPage() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">شرکت‌های فعال</p>
-              <p className="text-3xl font-bold text-gray-800">
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-1">شرکت‌های فعال</p>
+              <p className="text-3xl font-bold text-gray-800 dark:text-white">
                 {activeCompanies || 0}
               </p>
             </div>
-            <div className="p-3 bg-green-100 rounded-lg">
-              <Building className="w-8 h-8 text-green-600" />
+            <div className="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
+              <Building className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">مجموع شرکت‌ها</p>
-              <p className="text-3xl font-bold text-gray-800">
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-1">مجموع شرکت‌ها</p>
+              <p className="text-3xl font-bold text-gray-800 dark:text-white">
                 {companies.length || 0}
               </p>
             </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <TrendingUp className="w-8 h-8 text-blue-600" />
+            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
+              <TrendingUp className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">صنایع مختلف</p>
-              <p className="text-3xl font-bold text-gray-800">
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-1">صنایع مختلف</p>
+              <p className="text-3xl font-bold text-gray-800 dark:text-white">
                 {industries.length || 0}
               </p>
             </div>
-            <div className="p-3 bg-purple-100 rounded-lg">
-              <span className="text-purple-600 font-bold text-lg">صنایع</span>
+            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
+              <span className="text-purple-600 dark:text-purple-400 font-bold text-lg">صنایع</span>
             </div>
           </div>
         </div>
@@ -143,8 +143,8 @@ export default function CompaniesPage() {
       />
 
       {industries.length > 0 && (
-        <div className="mt-8 bg-white rounded-xl shadow p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">توزیع صنایع</h3>
+        <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">توزیع صنایع</h3>
           <div className="space-y-3">
             {industries.map((industry) => {
               const count = companies.filter(c => (c?.industry?.name || c?.industry || c?.category?.name) === industry).length
@@ -155,12 +155,12 @@ export default function CompaniesPage() {
               return (
                 <div key={industry} className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700">{industry}</span>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-gray-700 dark:text-gray-300">{industry}</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
                       {count} شرکت ({percentage}%)
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                     <div 
                       className="bg-blue-600 h-2 rounded-full" 
                       style={{ width: `${percentage}%` }}

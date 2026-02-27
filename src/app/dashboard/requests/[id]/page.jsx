@@ -177,12 +177,12 @@ export default function TicketDetailPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/requests"
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 transition-colors"
           >
             <ArrowRight className="w-5 h-5" />
             <span>بازگشت</span>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-800">{ticket.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">{ticket.title}</h1>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -233,30 +233,30 @@ export default function TicketDetailPage() {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Description */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">توضیحات</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">توضیحات</h3>
             <div
-              className="prose prose-sm max-w-none text-gray-700"
+              className="prose prose-sm max-w-none text-gray-700 dark:text-gray-300"
               dangerouslySetInnerHTML={{ __html: ticket.description }}
             />
           </div>
 
           {/* Replies */}
-          <div className="bg-white rounded-xl shadow p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
             <div className="flex items-center gap-2 mb-4">
-              <MessageSquare className="w-5 h-5 text-gray-600" />
-              <h3 className="text-lg font-bold text-gray-800">پاسخ‌ها</h3>
-              <span className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
+              <MessageSquare className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white">پاسخ‌ها</h3>
+              <span className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600 dark:text-gray-400">
                 {ticket.reply_count}
               </span>
             </div>
             {ticket.replies && ticket.replies.length > 0 ? (
               <div className="space-y-4">
                 {ticket.replies.map((reply) => (
-                  <div key={reply.id} className={`border-b border-gray-100 pb-4 last:border-0 ${reply.type === 'کامنت' ? 'bg-purple-50 p-4 rounded-lg -mx-4' : 'p-2'}`}>
+                  <div key={reply.id} className={`border-b border-gray-100 dark:border-gray-700 pb-4 last:border-0 ${reply.type === 'کامنت' ? 'bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg -mx-4' : 'p-2'}`}>
                     <div className="flex items-center gap-2 mb-2 flex-wrap">
                       <User className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-medium text-gray-700">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         {reply.user?.full_name || 'نامشخص'}
                       </span>
                       <span className={`px-2 py-0.5 rounded text-xs ${reply.type === 'کامنت' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700'}`}>
@@ -267,14 +267,14 @@ export default function TicketDetailPage() {
                       </span>
                     </div>
                     <div
-                      className="text-sm text-gray-700"
+                      className="text-sm text-gray-700 dark:text-gray-300"
                       dangerouslySetInnerHTML={{ __html: reply.message || '' }}
                     />
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-sm">هنوز پاسخی ثبت نشده است</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">هنوز پاسخی ثبت نشده است</p>
             )}
           </div>
         </div>
@@ -282,17 +282,17 @@ export default function TicketDetailPage() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Editable Ticket Info */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">اطلاعات تیکت</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">اطلاعات تیکت</h3>
             <div className="space-y-4">
               {/* Status */}
               <div>
-                <p className="text-sm text-gray-500 mb-1">وضعیت</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">وضعیت</p>
                 {isEditing ? (
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                   >
                     <option value="">انتخاب وضعیت</option>
                     {statuses.map((s) => (
@@ -306,12 +306,12 @@ export default function TicketDetailPage() {
 
               {/* Priority */}
               <div>
-                <p className="text-sm text-gray-500 mb-1">اولویت</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">اولویت</p>
                 {isEditing ? (
                   <select
                     value={formData.priority}
                     onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                   >
                     <option value="">انتخاب اولویت</option>
                     {priorities.map((p) => (
@@ -325,12 +325,12 @@ export default function TicketDetailPage() {
 
               {/* Department */}
               <div>
-                <p className="text-sm text-gray-500 mb-1">دپارتمان</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">دپارتمان</p>
                 {isEditing ? (
                   <select
                     value={formData.department_id}
                     onChange={(e) => setFormData({ ...formData, department_id: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                   >
                     <option value="">انتخاب دپارتمان</option>
                     {departments.map((d) => (
@@ -338,18 +338,18 @@ export default function TicketDetailPage() {
                     ))}
                   </select>
                 ) : (
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-sm font-medium text-gray-800 dark:text-white">
                     {ticket.department?.name || 'تعیین نشده'}
                   </p>
                 )}
               </div>
 
               {/* Requester - Read only */}
-              <div className="flex items-start gap-3 pt-2 border-t border-gray-100">
+              <div className="flex items-start gap-3 pt-2 border-t border-gray-100 dark:border-gray-700">
                 <User className="w-5 h-5 text-gray-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-gray-500">درخواست‌دهنده</p>
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">درخواست‌دهنده</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white">
                     {ticket.user?.full_name || 'نامشخص'}
                   </p>
                   {ticket.user?.email && (
@@ -362,8 +362,8 @@ export default function TicketDetailPage() {
               <div className="flex items-start gap-3">
                 <User className="w-5 h-5 text-gray-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-gray-500">کارشناس مسئول</p>
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">کارشناس مسئول</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white">
                     {ticket.assignee?.full_name || 'در انتظار تخصیص'}
                   </p>
                 </div>
@@ -373,8 +373,8 @@ export default function TicketDetailPage() {
               <div className="flex items-start gap-3">
                 <Clock className="w-5 h-5 text-gray-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-gray-500">تاریخ ایجاد</p>
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">تاریخ ایجاد</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white">
                     {new Date(ticket.created_at).toLocaleDateString('fa-IR')}
                   </p>
                 </div>
@@ -383,23 +383,23 @@ export default function TicketDetailPage() {
           </div>
 
           {/* Editable Timeline */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">زمان‌بندی</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">زمان‌بندی</h3>
             <div className="space-y-4">
               {/* Start Date */}
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-5 h-5 text-blue-500" />
-                  <p className="text-sm text-gray-500">زمان شروع</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">زمان شروع</p>
                 </div>
                 {isEditing ? (
-                  <div className="flex items-center bg-white rounded-lg border border-gray-300 pr-3">
+                  <div className="flex items-center bg-white dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 pr-3">
                     <DatePicker
                       calendar={persian}
                       locale={persian_fa}
                       value={formData.start_at}
                       onChange={(date) => setFormData({ ...formData, start_at: date })}
-                      inputClass="border-none outline-none py-2 w-full text-sm text-gray-900 bg-transparent"
+                      inputClass="border-none outline-none py-2 w-full text-sm text-gray-900 dark:text-white bg-transparent rmdp-input"
                       format="YYYY/MM/DD HH:mm"
                     />
                     {formData.start_at && (
@@ -413,7 +413,7 @@ export default function TicketDetailPage() {
                     )}
                   </div>
                 ) : (
-                  <p className="text-sm font-medium text-gray-800 mr-7">
+                  <p className="text-sm font-medium text-gray-800 dark:text-white mr-7">
                     {ticket.dates?.start_at
                       ? new Date(ticket.dates.start_at).toLocaleDateString('fa-IR')
                       : 'تعیین نشده'}
@@ -425,16 +425,16 @@ export default function TicketDetailPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-5 h-5 text-red-500" />
-                  <p className="text-sm text-gray-500">مهلت پایان</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">مهلت پایان</p>
                 </div>
                 {isEditing ? (
-                  <div className="flex items-center bg-white rounded-lg border border-gray-300 pr-3">
+                  <div className="flex items-center bg-white dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 pr-3">
                     <DatePicker
                       calendar={persian}
                       locale={persian_fa}
                       value={formData.end_at}
                       onChange={(date) => setFormData({ ...formData, end_at: date })}
-                      inputClass="border-none outline-none py-2 w-full text-sm text-gray-900 bg-transparent"
+                      inputClass="border-none outline-none py-2 w-full text-sm text-gray-900 dark:text-white bg-transparent rmdp-input"
                       format="YYYY/MM/DD HH:mm"
                     />
                     {formData.end_at && (
@@ -448,7 +448,7 @@ export default function TicketDetailPage() {
                     )}
                   </div>
                 ) : (
-                  <p className="text-sm font-medium text-gray-800 mr-7">
+                  <p className="text-sm font-medium text-gray-800 dark:text-white mr-7">
                     {ticket.dates?.end_at
                       ? new Date(ticket.dates.end_at).toLocaleDateString('fa-IR')
                       : 'تعیین نشده'}
@@ -461,8 +461,8 @@ export default function TicketDetailPage() {
                 <div className="flex items-start gap-3">
                   <Calendar className="w-5 h-5 text-green-500 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">تاریخ تکمیل</p>
-                    <p className="text-sm font-medium text-gray-800">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">تاریخ تکمیل</p>
+                    <p className="text-sm font-medium text-gray-800 dark:text-white">
                       {new Date(ticket.dates.completed_at).toLocaleDateString('fa-IR')}
                     </p>
                   </div>
@@ -473,10 +473,10 @@ export default function TicketDetailPage() {
 
           {/* Attachments */}
           {ticket.has_attachments && ticket.files && ticket.files.length > 0 && (
-            <div className="bg-white rounded-xl shadow p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Paperclip className="w-5 h-5 text-gray-600" />
-                <h3 className="text-lg font-bold text-gray-800">پیوست‌ها</h3>
+                <Paperclip className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <h3 className="text-lg font-bold text-gray-800 dark:text-white">پیوست‌ها</h3>
               </div>
               <div className="space-y-2">
                 {ticket.files.map((file) => (
@@ -485,10 +485,10 @@ export default function TicketDetailPage() {
                     href={`http://localhost:8000${file.file_path}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                    className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors group"
                   >
                     <Download className="w-4 h-4 text-gray-400 group-hover:text-blue-600" />
-                    <span className="text-sm text-gray-700 truncate flex-1">
+                    <span className="text-sm text-gray-700 dark:text-gray-300 truncate flex-1">
                       {file.file_name}
                     </span>
                   </a>
@@ -502,36 +502,36 @@ export default function TicketDetailPage() {
       {/* Reply Modal */}
       {showReplyModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-gray-800">ثبت پاسخ</h3>
-              <button onClick={() => setShowReplyModal(false)} className="text-gray-400 hover:text-gray-600">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white">ثبت پاسخ</h3>
+              <button onClick={() => setShowReplyModal(false)} className="text-gray-400 hover:text-gray-600 dark:text-gray-400">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-800 mb-1">پیام</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-white mb-1">پیام</label>
                 <textarea
                   value={replyData.message}
                   onChange={(e) => setReplyData({ ...replyData, message: e.target.value })}
                   rows={5}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="پاسخ خود را وارد کنید..."
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-800 mb-1">پیوست (اختیاری)</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-white mb-1">پیوست (اختیاری)</label>
                 <input
                   type="file"
                   onChange={(e) => setReplyData({ ...replyData, file: e.target.files[0] })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm dark:bg-gray-700 dark:text-white"
                 />
               </div>
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowReplyModal(false)}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
                   انصراف
                 </button>
@@ -551,36 +551,36 @@ export default function TicketDetailPage() {
       {/* Comment Modal */}
       {showCommentModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-gray-800">ثبت کامنت</h3>
-              <button onClick={() => setShowCommentModal(false)} className="text-gray-400 hover:text-gray-600">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white">ثبت کامنت</h3>
+              <button onClick={() => setShowCommentModal(false)} className="text-gray-400 hover:text-gray-600 dark:text-gray-400">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-800 mb-1">پیام</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-white mb-1">پیام</label>
                 <textarea
                   value={commentData.message}
                   onChange={(e) => setCommentData({ ...commentData, message: e.target.value })}
                   rows={5}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="کامنت خود را وارد کنید..."
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-800 mb-1">پیوست (اختیاری)</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-white mb-1">پیوست (اختیاری)</label>
                 <input
                   type="file"
                   onChange={(e) => setCommentData({ ...commentData, file: e.target.files[0] })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm dark:bg-gray-700 dark:text-white"
                 />
               </div>
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowCommentModal(false)}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
                   انصراف
                 </button>

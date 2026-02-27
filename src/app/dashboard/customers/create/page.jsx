@@ -201,8 +201,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="rounded-2xl border border-gray-300 bg-white p-10 shadow-md">
-      <h1 className="text-2xl font-bold mb-10 text-gray-900 text-center">ثبت‌نام</h1>
+    <div className="rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-10 shadow-md">
+      <h1 className="text-2xl font-bold mb-10 text-gray-900 dark:text-white text-center">ثبت‌نام</h1>
       <div className="w-full">
 
         <form
@@ -212,16 +212,16 @@ export default function RegisterPage() {
         >
 
 
-          <div className="rounded-xl border border-gray-300 bg-gray-50 p-8">
-            <h4 className="mb-6 text-lg font-semibold text-gray-900">
+          <div className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 p-8">
+            <h4 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
               اطلاعات پایه
             </h4>
             {typeName === "customer" && (
               <div className="flex flex-col mb-4">
-                <label className="mb-2 text-sm font-medium text-gray-700">نوع شخص</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">نوع شخص</label>
                 <select
                   value={form.customer_type || ""}
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   onChange={e => setForm({ ...form, customer_type: Number(e.target.value) })}
                 >
                   <option value="">انتخاب نوع شخص</option>
@@ -235,9 +235,9 @@ export default function RegisterPage() {
             )}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">نام</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">نام</label>
                 <input
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="نام"
                   onChange={e => setForm({ ...form, first_name: e.target.value })}
                 />
@@ -246,9 +246,9 @@ export default function RegisterPage() {
                 )}
               </div>
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">نام خانوادگی</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">نام خانوادگی</label>
                 <input
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="نام خانوادگی"
                   onChange={e => setForm({ ...form, last_name: e.target.value })} />
                 {errors.last_name && (
@@ -256,8 +256,8 @@ export default function RegisterPage() {
                 )}
               </div>
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">تاریخ تولد</label>
-                <div className="flex items-center bg-white rounded-lg border border-gray-400 pr-4">
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">تاریخ تولد</label>
+                <div className="flex items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-400 dark:border-gray-600 pr-4">
                   <DatePicker
                     calendar={persian}
                     locale={persian_fa}
@@ -265,7 +265,7 @@ export default function RegisterPage() {
                     onChange={(date) =>
                       setForm({ ...form, birth_date: date })
                     }
-                    inputClass="border-none outline-none py-2.5 w-full text-gray-900 bg-transparent"
+                    inputClass="border-none outline-none py-2.5 w-full text-gray-900 dark:text-white bg-transparent rmdp-input"
                     placeholder="تاریخ تولد"
                   />
                 </div>
@@ -274,9 +274,9 @@ export default function RegisterPage() {
                 )}
               </div>
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">جنسیت</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">جنسیت</label>
                 <select
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   value={form.gender || ""}
                   onChange={e => setForm({ ...form, gender: Number(e.target.value) })}
                 >
@@ -289,9 +289,9 @@ export default function RegisterPage() {
                 )}
               </div>
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">کد ملی</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">کد ملی</label>
                 <input
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="کد ملی"
                   onChange={e => setForm({ ...form, national_code: e.target.value })}
                 />
@@ -302,10 +302,10 @@ export default function RegisterPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">موبایل</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">موبایل</label>
                 <input
                   autoComplete="off"
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="موبایل (نام کاربری)"
                   onChange={e => setForm({ ...form, mobile: e.target.value })}
                 />
@@ -322,9 +322,9 @@ export default function RegisterPage() {
                 />
               </div>
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">ایمیل</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">ایمیل</label>
                 <input type="email"
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="ایمیل"
                   onChange={e => setForm({ ...form, email: e.target.value })}
                 />
@@ -334,18 +334,18 @@ export default function RegisterPage() {
               </div>
             </div>
           </div>
-          <div className="rounded-xl border border-gray-300 bg-gray-50 p-8">
-            <h4 className="mb-6 text-lg font-semibold text-gray-900">
+          <div className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 p-8">
+            <h4 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
               آدرس
             </h4>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">نام آدرس</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">نام آدرس</label>
                 <input
                   type="text"
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="نام آدرس"
                   onChange={e =>
                     setForm({
@@ -365,9 +365,9 @@ export default function RegisterPage() {
               </div>
 
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">استان</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">استان</label>
                 <select
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   value={form.address?.province_id || ""}
                   onChange={async (e) => {
                     const provinceId = Number(e.target.value);
@@ -410,9 +410,9 @@ export default function RegisterPage() {
               </div>
 
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">شهر</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">شهر</label>
                 <select
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-200"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-200 dark:disabled:bg-gray-600"
                   value={form.address?.city_id || ""}
                   disabled={!form.address?.province_id}
                   onChange={e =>
@@ -444,10 +444,10 @@ export default function RegisterPage() {
               </div>
 
               <div className="flex flex-col">
-                <label className="mb-2 text-sm font-medium text-gray-700">کد پستی</label>
+                <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">کد پستی</label>
                 <input
                   type="text"
-                  className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="کد پستی"
                   onChange={e =>
                     setForm({
@@ -467,10 +467,10 @@ export default function RegisterPage() {
               </div>
             </div>
             <div className="col-span-2 flex flex-col mt-4">
-              <label className="mb-2 text-sm font-medium text-gray-700">آدرس کامل</label>
+              <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">آدرس کامل</label>
               <textarea
                 rows={2}
-                className="w-full border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="آدرس کامل"
                 onChange={e =>
                   setForm({
@@ -491,15 +491,15 @@ export default function RegisterPage() {
           </div>
 
           {form.customer_type === 2 && (
-            <div className="rounded-xl border border-gray-300 bg-gray-50 p-8">
-              <h4 className="mb-6 text-lg font-semibold text-gray-900">
+            <div className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 p-8">
+              <h4 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
                 اطلاعات شرکت
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex flex-col">
-                  <label className="mb-2 text-sm font-medium text-gray-700">نام شرکت</label>
+                  <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">نام شرکت</label>
                   <input
-                    className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="نام شرکت"
                     onChange={e => setForm({ ...form, company_name: e.target.value })}
                   />
@@ -508,9 +508,9 @@ export default function RegisterPage() {
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <label className="mb-2 text-sm font-medium text-gray-700">شناسه ملی</label>
+                  <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">شناسه ملی</label>
                   <input
-                    className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="شناسه ملی"
                     onChange={e => setForm({ ...form, national_id: e.target.value })}
                   />
@@ -519,8 +519,8 @@ export default function RegisterPage() {
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <label className="mb-2 text-sm font-medium text-gray-700">تاریخ ثبت شرکت</label>
-                  <div className="flex items-center bg-white rounded-lg border border-gray-400 pr-4">
+                  <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">تاریخ ثبت شرکت</label>
+                  <div className="flex items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-400 dark:border-gray-600 pr-4">
                     <DatePicker
                       calendar={persian}
                       locale={persian_fa}
@@ -528,7 +528,7 @@ export default function RegisterPage() {
                       onChange={(date) =>
                         setForm({ ...form, registeration_date: date })
                       }
-                      inputClass="border-none outline-none py-2.5 w-full text-gray-900 bg-transparent"
+                      inputClass="border-none outline-none py-2.5 w-full text-gray-900 dark:text-white bg-transparent rmdp-input"
                       placeholder="تاریخ ثبت شرکت"
                     />
                   </div>
@@ -544,17 +544,17 @@ export default function RegisterPage() {
           )}
 
           {typeName === "employee" && (
-            <div className="rounded-xl border border-gray-300 bg-gray-50 p-8">
-              <h4 className="mb-6 text-lg font-semibold text-gray-900">
+            <div className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 p-8">
+              <h4 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
                 اطلاعات کارمند
               </h4>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex flex-col">
 
-                  <label className="mb-2 text-sm font-medium text-gray-700">دپارتمان</label>
+                  <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">دپارتمان</label>
                   <select
-                    className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                     value={form.department_id || ""}
                     onChange={async (e) => {
                       const departmentId = Number(e.target.value);
@@ -595,9 +595,9 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="mb-2 text-sm font-medium text-gray-700">موقعیت شغلی</label>
+                  <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">موقعیت شغلی</label>
                   <select
-                    className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-200"
+                    className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-200 dark:disabled:bg-gray-600"
                     value={form.position_id || ""}
                     disabled={!form.department_id}
                     onChange={e =>
@@ -624,10 +624,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="mb-2 text-sm font-medium text-gray-700">شماره داخلی</label>
+                  <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">شماره داخلی</label>
                   <input
                     type="text"
-                    className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="شماره داخلی"
                     value={form.internal_code}
                     onChange={e =>
@@ -646,7 +646,7 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <div className="flex justify-end pt-4 border-t border-gray-300">
+          <div className="flex justify-end pt-4 border-t border-gray-300 dark:border-gray-600">
             <button
               type="submit"
               className={`bg-blue-600 hover:bg-blue-700 text-white px-12 py-3 rounded-lg font-bold text-lg transition-all ${loading ? "opacity-50 cursor-not-allowed" : ""

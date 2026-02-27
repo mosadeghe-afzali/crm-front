@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --color-dark-bg: #0a0a0a;
+  --color-dark-text: #ededed;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: "Vazir";
   src: url("/fonts/Vazir-Regular.ttf") format("truetype");
@@ -12,11 +19,9 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {
@@ -24,4 +29,89 @@ body {
   color: var(--foreground);
   font-family: "Vazir", sans-serif;
   direction: rtl;
+}
+
+.dark .rmdp-container {
+  --rmdp-box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+.dark .rmdp-calendar {
+  background: #1f2937;
+  border: 1px solid #4b5563;
+}
+
+.dark .rmdp-header {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+.dark .rmdp-week-day {
+  color: #9ca3af;
+}
+
+.dark .rmdp-day {
+  color: #ffffff;
+}
+
+.dark .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:not(.rmdp-bdc) {
+  color: #ffffff;
+}
+
+.dark .rmdp-day.rmdp-selected:not(.rmdp-disabled) span {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.dark .rmdp-day:not(.rmdp-disabled):not(.rmdp-selected):hover span {
+  background-color: #374151;
+}
+
+.dark .rmdp-arrow {
+  color: #ffffff;
+}
+
+.dark .rmdp-month-btn {
+  color: #ffffff;
+}
+
+.dark .rmdp-picker {
+  background: #1f2937;
+  border: 1px solid #4b5563;
+}
+
+.dark .rmdp-picker div {
+  color: #ffffff;
+}
+
+.dark .rmdp-time-picker {
+  background: #1f2937;
+}
+
+.dark .rmdp-time-picker div {
+  color: #ffffff;
+}
+
+.dark .rmdp-input {
+  background: #1f2937;
+  color: #ffffff;
+  border: none !important;
+}
+
+.dark .rmdp-input::placeholder {
+  color: #9ca3af;
+}
+
+.rmdp-input {
+  border: none !important;
+  outline: none !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  padding: 0.625rem 0.75rem !important;
+  line-height: 1.5 !important;
+  box-sizing: border-box !important;
+}
+
+div.rmdp-input {
+  display: flex !important;
+  align-items: center !important;
 }

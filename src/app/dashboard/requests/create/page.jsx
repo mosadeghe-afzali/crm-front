@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 
 export default function CreateTicketPage() {
   const router = useRouter();
+  
   const [form, setForm] = useState({
     user_id: "",
     title: "",
@@ -147,16 +148,16 @@ export default function CreateTicketPage() {
   };
 
   return (
-    <div className="rounded-2xl border border-gray-300 bg-white p-10 shadow-md">
-      <h2 className="text-2xl font-bold mb-10 text-gray-900">ایجاد تیکت جدید</h2>
+    <div className="rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-10 shadow-md">
+      <h2 className="text-2xl font-bold mb-10 text-gray-900 dark:text-white">ایجاد تیکت جدید</h2>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-5 gap-12">
         {/* RIGHT SIDE */}
         <div className="lg:col-span-3 space-y-8 max-w-xl">
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">عنوان تیکت</label>
+            <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">عنوان تیکت</label>
             <input
-              className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
             />
@@ -164,9 +165,9 @@ export default function CreateTicketPage() {
           </div>
 
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">نوع درخواست‌دهنده</label>
+            <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">نوع درخواست‌دهنده</label>
             <select
-              className="border border-gray-400 rounded-lg px-4 py-2.5 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+              className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
               value={form.requester_type}
               onChange={(e) => setForm({ ...form, requester_type: Number(e.target.value), owner_id: null })}
             >
@@ -177,8 +178,8 @@ export default function CreateTicketPage() {
           </div>
 
           {form.requester_type === 1 && (
-            <div className="flex flex-col text-gray-900">
-              <label className="mb-2 text-sm font-medium text-gray-700">انتخاب کاربر</label>
+            <div className="flex flex-col text-gray-900 dark:text-white">
+              <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">انتخاب کاربر</label>
               <SearchableSelect
                 placeholder="نام کاربر را انتخاب کنید"
                 fetchUrl="users/customers"
@@ -189,8 +190,8 @@ export default function CreateTicketPage() {
           )}
 
           <div className="flex flex-col">
-            <label className="mb-3 text-sm font-medium text-gray-700">توضیحات تیکت</label>
-            <div className="relative border border-gray-400 rounded-lg overflow-hidden text-gray-900">
+            <label className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">توضیحات تیکت</label>
+            <div className="relative border border-gray-400 dark:border-gray-600 rounded-lg overflow-hidden text-gray-900 dark:text-white">
               <RichTextEditor
                 value={form.description}
                 onChange={(html) => setForm({ ...form, description: html })}
@@ -201,11 +202,11 @@ export default function CreateTicketPage() {
         </div>
 
         {/* LEFT SIDE */}
-        <div className="lg:col-span-2 space-y-6 bg-gray-50 p-8 rounded-xl border border-gray-300 max-w-md h-fit">
+        <div className="lg:col-span-2 space-y-6 bg-gray-50 dark:bg-gray-700 p-8 rounded-xl border border-gray-300 dark:border-gray-600 max-w-md h-fit">
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">اولویت تیکت</label>
+            <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">اولویت تیکت</label>
             <select
-              className="border border-gray-400 rounded-lg px-4 py-2.5 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
               value={form.priority}
               onChange={(e) => setForm({ ...form, priority: e.target.value })}
             >
@@ -216,9 +217,9 @@ export default function CreateTicketPage() {
           </div>
 
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">دپارتمان</label>
+            <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">دپارتمان</label>
             <select
-              className="border border-gray-400 rounded-lg px-4 py-2.5 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-400 dark:border-gray-600 rounded-lg px-4 py-2.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
               value={form.department_id}
               onChange={(e) => setForm({ ...form, department_id: e.target.value })}
             >
@@ -227,9 +228,10 @@ export default function CreateTicketPage() {
             </select>
             {errors.department_id && <p className="text-sm text-red-600 mt-1">{errors.department_id}</p>}
           </div>
+
           {/* Assignee */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">
+            <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               مسئول تیکت
             </label>
 
@@ -253,14 +255,14 @@ export default function CreateTicketPage() {
           </div>
           {/* Start Time */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">زمان آغاز</label>
-            <div className="flex items-center bg-white rounded-lg border border-gray-400 pr-3">
+            <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">زمان آغاز</label>
+            <div className="flex items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-400 dark:border-gray-600 pr-3">
               <DatePicker
                 calendar={persian}
                 locale={persian_fa}
                 value={form.start_at}
                 onChange={(date) => setForm({ ...form, start_at: date })}
-                inputClass="border-none outline-none py-2.5 w-full text-gray-900 bg-transparent"
+                inputClass="border-none outline-none py-2.5 w-full text-gray-900 dark:text-white bg-transparent rmdp-input"
                 format="YYYY/MM/DD HH:mm"
               />
               {form.start_at && (
@@ -271,14 +273,14 @@ export default function CreateTicketPage() {
 
           {/* End Time */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">زمان پایان</label>
-            <div className="flex items-center bg-white rounded-lg border border-gray-400 pr-3">
+            <label className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">زمان پایان</label>
+            <div className="flex items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-400 dark:border-gray-600 pr-3">
               <DatePicker
                 calendar={persian}
                 locale={persian_fa}
                 value={form.end_at}
                 onChange={(date) => setForm({ ...form, end_at: date })}
-                inputClass="border-none outline-none py-2.5 w-full text-gray-900 bg-transparent"
+                inputClass="border-none outline-none py-2.5 w-full text-gray-900 dark:text-white bg-transparent rmdp-input"
                 format="YYYY/MM/DD HH:mm"
               />
               {form.end_at && (
@@ -289,11 +291,11 @@ export default function CreateTicketPage() {
         </div>
 
         {/* ATTACHMENTS */}
-        <div className="lg:col-span-5 border-t border-gray-300 pt-8 mt-4">
+        <div className="lg:col-span-5 border-t border-gray-300 dark:border-gray-600 pt-8 mt-4">
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-gray-900">ضمائم و فایل‌های پیوست</h3>
-              <label className="cursor-pointer bg-white text-gray-800 px-4 py-2 rounded-lg border border-gray-400 hover:text-blue-600 transition-all text-xs font-bold">
+              <h3 className="font-bold text-gray-900 dark:text-white">ضمائم و فایل‌های پیوست</h3>
+              <label className="cursor-pointer bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg border border-gray-400 dark:border-gray-600 hover:text-blue-600 transition-all text-xs font-bold">
                 <span>📎 انتخاب فایل</span>
                 <input type="file" multiple className="hidden" onChange={(e) => {
                   const newFiles = Array.from(e.target.files);
@@ -304,8 +306,8 @@ export default function CreateTicketPage() {
             </div>
             <div className="flex flex-wrap gap-3">
               {form.attachments.map((file, index) => (
-                <div key={index} className="flex items-center gap-4 bg-gray-50 px-3 py-2 rounded-lg border border-gray-300">
-                  <span className="text-sm text-gray-900 truncate max-w-[150px]">{file.name}</span>
+                <div key={index} className="flex items-center gap-4 bg-gray-50 dark:bg-gray-700 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600">
+                  <span className="text-sm text-gray-900 dark:text-white truncate max-w-[150px]">{file.name}</span>
                   <button type="button" onClick={() => removeFile(index)} className="text-red-500 text-2xl font-bold">×</button>
                 </div>
               ))}
@@ -314,7 +316,7 @@ export default function CreateTicketPage() {
         </div>
 
         {/* Submit Button */}
-        <div className="lg:col-span-5 flex justify-end pt-8 border-t border-gray-300">
+        <div className="lg:col-span-5 flex justify-end pt-8 border-t border-gray-300 dark:border-gray-600">
           <button
             type="submit"
             disabled={loading}

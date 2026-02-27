@@ -24,8 +24,8 @@ export default function DashboardPage() {
             <span className="text-white font-bold">{value.charAt(0)}</span>
           </div>
           <div>
-            <p className="font-medium">{value}</p>
-            <p className="text-gray-500 text-sm">{row.department}</p>
+            <p className="font-medium dark:text-white">{value}</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">{row.department}</p>
           </div>
         </div>
       )
@@ -43,7 +43,7 @@ export default function DashboardPage() {
       label: 'امتیاز',
       render: (value) => (
         <div className="flex items-center gap-1">
-          <span className="font-bold">{value}</span>
+          <span className="font-bold dark:text-white">{value}</span>
           <span className="text-yellow-500">★</span>
         </div>
       )
@@ -82,7 +82,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">داشبورد مدیریت</h1>
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">داشبورد مدیریت</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatsCard
@@ -116,29 +116,29 @@ export default function DashboardPage() {
       </div>
 
       <div className="mb-6">
-        <div className="flex border-b border-gray-200">
+        <div className="flex border-b border-gray-200 dark:border-gray-700">
           <button
             onClick={() => setActiveTab('experts')}
-            className={`px-6 py-3 font-medium ${activeTab === 'experts' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`px-6 py-3 font-medium ${activeTab === 'experts' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
           >
             کارشناسان
           </button>
           <button
             onClick={() => setActiveTab('companies')}
-            className={`px-6 py-3 font-medium ${activeTab === 'companies' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`px-6 py-3 font-medium ${activeTab === 'companies' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
           >
             شرکت‌ها
           </button>
           <button
             onClick={() => setActiveTab('requests')}
-            className={`px-6 py-3 font-medium ${activeTab === 'requests' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`px-6 py-3 font-medium ${activeTab === 'requests' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
           >
             درخواست‌ها
           </button>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
         {activeTab === 'experts' && (
           <DataTable
             columns={expertColumns}
